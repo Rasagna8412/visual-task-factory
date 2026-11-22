@@ -1,7 +1,7 @@
 {
   "metadata": {
     "benchmark": "Visual Task Factory - 2D Spatial Occlusion & Counting",
-    "generated_at": "2026-11-22T10:34:55.429177",
+    "generated_at": "2026-11-22T10:58:07.602596",
     "total_models_evaluated": 2
   },
   "models": {
@@ -21,8 +21,8 @@
         "hard": 0.0
       },
       "accuracy_by_occlusion_bucket": {
-        "0-25%": 14.3,
-        "25-50%": 11.1,
+        "0-25%": 0.0,
+        "25-50%": 13.3,
         "50-75%": 0.0,
         "75-100%": 33.3
       },
@@ -44,9 +44,9 @@
         "hard": 33.3
       },
       "accuracy_by_occlusion_bucket": {
-        "0-25%": 57.1,
-        "25-50%": 55.6,
-        "50-75%": 50.0,
+        "0-25%": 33.3,
+        "25-50%": 60.0,
+        "50-75%": 0.0,
         "75-100%": 100.0
       },
       "total_queries_evaluated": 42

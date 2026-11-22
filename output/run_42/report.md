@@ -1,5 +1,5 @@
 # Visual Task Factory: Milestone 3 Benchmark Evaluation Report
-*Generated on: 2026-11-22 10:49:06*
+*Generated on: 2026-11-22 10:58:28*
 
 ## 1. Executive Summary & Model Leaderboard
 

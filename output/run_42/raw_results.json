@@ -13,7 +13,7 @@
     "raw_response": "yes",
     "ground_truth": "yes",
     "is_correct": true,
-    "latency_ms": 0.2
+    "latency_ms": 0.1
   },
   {
     "task_id": "pair_1_easy_base",
@@ -36,7 +36,7 @@
     },
     "ground_truth": "yes",
     "is_correct": true,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_1_easy_base",
@@ -286,7 +286,7 @@
     "raw_response": "12",
     "ground_truth": "12",
     "is_correct": true,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_2_medium_base",
@@ -598,7 +598,7 @@
     "raw_response": "no",
     "ground_truth": "no",
     "is_correct": true,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_3_hard_counterfactual",
@@ -1027,7 +1027,7 @@
     "raw_response": "2",
     "ground_truth": "2",
     "is_correct": true,
-    "latency_ms": 0.0
+    "latency_ms": 0.1
   },
   {
     "task_id": "pair_5_medium_base",
@@ -1908,7 +1908,7 @@
     },
     "ground_truth": "yes",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_9_hard_base",
@@ -2610,7 +2610,7 @@
     },
     "ground_truth": "yes",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_12_hard_base",
@@ -3484,7 +3484,7 @@
     "raw_response": "2",
     "ground_truth": "2",
     "is_correct": true,
-    "latency_ms": 0.0
+    "latency_ms": 0.1
   },
   {
     "task_id": "abstention_6_hard",
@@ -3523,7 +3523,7 @@
     "raw_response": "yes",
     "ground_truth": "yes",
     "is_correct": true,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_1_easy_base",
@@ -3718,7 +3718,7 @@
     "raw_response": "5",
     "ground_truth": "2",
     "is_correct": false,
-    "latency_ms": 0.0
+    "latency_ms": 0.1
   },
   {
     "task_id": "pair_1_easy_counterfactual",
@@ -3796,7 +3796,7 @@
     "raw_response": "12",
     "ground_truth": "12",
     "is_correct": true,
-    "latency_ms": 0.0
+    "latency_ms": 0.4
   },
   {
     "task_id": "pair_2_medium_base",
@@ -3874,7 +3874,7 @@
     "raw_response": "yes",
     "ground_truth": "no",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_2_medium_counterfactual",
@@ -4264,7 +4264,7 @@
     "raw_response": "2",
     "ground_truth": "2",
     "is_correct": true,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_4_easy_base",
@@ -5457,7 +5457,7 @@
     },
     "ground_truth": "36",
     "is_correct": true,
-    "latency_ms": 0.0
+    "latency_ms": 0.3
   },
   {
     "task_id": "pair_9_hard_base",
@@ -6097,7 +6097,7 @@
     "raw_response": "no",
     "ground_truth": "yes",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_12_hard_base",
@@ -6175,7 +6175,7 @@
     "raw_response": "2",
     "ground_truth": "4",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "pair_12_hard_base",
@@ -6432,7 +6432,7 @@
     },
     "ground_truth": "1",
     "is_correct": true,
-    "latency_ms": 0.0
+    "latency_ms": 0.3
   },
   {
     "task_id": "abstention_2_medium",
@@ -6721,7 +6721,7 @@
     "raw_response": "green triangle",
     "ground_truth": "3",
     "is_correct": false,
-    "latency_ms": 0.1
+    "latency_ms": 0.0
   },
   {
     "task_id": "abstention_4_easy",

@@ -1,5 +1,5 @@
 # Visual Task Factory: Milestone 3 Benchmark Evaluation Report
-*Generated on: 2026-11-22 10:34:55*
+*Generated on: 2026-11-22 10:58:07*
 
 ## 1. Executive Summary & Model Leaderboard
 
@@ -19,8 +19,8 @@
 
 | Model | 0% - 25% Occlusion | 25% - 50% Occlusion | 50% - 75% Occlusion | 75% - 100% Occlusion |
 | :--- | :---: | :---: | :---: | :---: |
-| **mock-frontier-mid** | 14.3% | 11.1% | 0.0% | 33.3% |
-| **mock-frontier-strong** | 57.1% | 55.6% | 50.0% | 100.0% |
+| **mock-frontier-mid** | 0.0% | 13.3% | 0.0% | 33.3% |
+| **mock-frontier-strong** | 33.3% | 60.0% | 0.0% | 100.0% |
 
 ## 4. Key Findings & Diagnostic Observations
 

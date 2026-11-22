@@ -30,7 +30,7 @@ class ShortcutFilter:
         ollama_url: str = OLLAMA_DEFAULT_URL,
         model_name: str = DEFAULT_MODEL,
         mock_ollama: bool = False,
-        timeout: float = 4.0,
+        timeout: float = 60.0,
     ) -> None:
         self.ollama_url = ollama_url
         self.model_name = model_name
@@ -45,7 +45,7 @@ class ShortcutFilter:
             return self._server_available
 
         try:
-            r = httpx.get("http://localhost:11434/api/tags", timeout=1.0)
+            r = httpx.get("http://localhost:11434/api/tags", timeout=1.5)
             self._server_available = r.status_code == 200
         except Exception:
             self._server_available = False
@@ -77,10 +77,11 @@ class ShortcutFilter:
                         return raw_text
                 else:
                     self._server_available = False
-            except Exception:
+                    print(f"[ShortcutFilter] Local Ollama ({self.model_name}) returned status {resp.status_code} -> using clean --mock-ollama fallback")
+            except Exception as e:
                 # Mark server as unavailable for remaining trials in this run
                 self._server_available = False
-                print(f"[ShortcutFilter] Local Ollama ({self.model_name}) unresponsive -> using clean --mock-ollama fallback")
+                print(f"[ShortcutFilter] Local Ollama ({self.model_name}) error/unresponsive: {e} -> using clean --mock-ollama fallback")
 
         # Clean mock fallback:
         # A text-only model without vision has no access to the visual layout.
@@ -197,7 +198,7 @@ def evaluate_shortcut_filter(
     source: Union[str, Path, Dict[str, Any]],
     mock_ollama: bool = False,
     trials_per_question: int = 3,
-    timeout: float = 4.0,
+    timeout: float = 60.0,
 ) -> Tuple[bool, List[str], Dict[str, Any]]:
     """Convenience helper to run the shortcut filter."""
     flt = ShortcutFilter(mock_ollama=mock_ollama, timeout=timeout)
@@ -212,7 +213,7 @@ def main():
     parser.add_argument("path", type=str, help="Path to ground_truth.json or directory")
     parser.add_argument("--mock-ollama", action="store_true", help="Force mock LLM shortcut filter")
     parser.add_argument("--trials", type=int, default=3, help="Number of trials per question")
-    parser.add_argument("--timeout", type=float, default=4.0, help="HTTP timeout in seconds")
+    parser.add_argument("--timeout", type=float, default=60.0, help="HTTP timeout in seconds")
     args = parser.parse_args()
 
     target = Path(args.path)

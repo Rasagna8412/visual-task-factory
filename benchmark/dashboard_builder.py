@@ -187,9 +187,14 @@ class DashboardBuilder:
         mid_cons = mid_m.get("pairwise_consistency", 0.0)
         mid_abs = mid_m.get("abstention_accuracy", 0.0)
 
-        # Leaderboard rows
+        # Leaderboard rows sorted by Open-Ended Accuracy descending
         leaderboard_rows = []
-        for m, d in summary_metrics.items():
+        sorted_models = sorted(
+            summary_metrics.items(),
+            key=lambda item: item[1].get("open_ended_accuracy", 0.0),
+            reverse=True,
+        )
+        for m, d in sorted_models:
             gap_sign = "+" if d.get("mcq_shortcut_gap", 0) >= 0 else ""
             leaderboard_rows.append(f"""
             <tr>
@@ -420,7 +425,7 @@ class DashboardBuilder:
       </div>
       <div class="chart-box">
         <img src="{c2_b64}" alt="Consistency and MCQ Gap" />
-        <div class="chart-caption">Figure 2: Evaluation Primitives — MCQ Shortcut Gap & Pairwise Consistency</div>
+        <div class="chart-caption">Figure 2: Evaluation Primitives &mdash; MCQ Shortcut Gap &amp; Pairwise Consistency</div>
       </div>
       <div class="chart-box">
         <img src="{c3_b64}" alt="Occlusion Drop-Off" />
