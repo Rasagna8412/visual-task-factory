@@ -67,7 +67,11 @@ class ShortcutFilter:
                         "model": self.model_name,
                         "prompt": prompt,
                         "stream": False,
-                        "options": {"temperature": 0.7},
+                        "keep_alive": "10m",
+                        "options": {
+                            "num_predict": 16,
+                            "temperature": 0.7,
+                        },
                     },
                     timeout=self.timeout,
                 )
@@ -132,7 +136,7 @@ class ShortcutFilter:
             prompt = (
                 f"You are evaluating a visual question without access to the image.\n"
                 f"Question:\n{mcq_text}\n\n"
-                f"Answer with ONLY the single option letter (A, B, C, or D):"
+                f"Respond with ONLY the final answer (e.g., a single word, number, or letter A, B, C, or D) with no explanation:"
             )
 
             correct_count = 0
