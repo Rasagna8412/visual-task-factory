@@ -147,7 +147,7 @@ All generated data, raw query outputs, 300 DPI publication charts, markdown repo
 
 ```powershell
 # Clone workspace & enter directory
-git clone https://github.com/your-username/visual-task-factory.git
+git clone https://github.com/Rasagna8412/visual-task-factory.git
 cd visual-task-factory
 
 # Create virtual environment & install dependencies
