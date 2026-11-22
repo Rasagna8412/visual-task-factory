@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Technical Diagram - Seed 227 (medium)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 1024px;
+      height: 1024px;
+      overflow: hidden;
+      background-color: #0b1120;
+    }
+    svg {
+      display: block;
+      width: 1024px;
+      height: 1024px;
+      user-select: none;
+    }
+    .grid-line {
+      stroke: #1e293b;
+      stroke-width: 1;
+    }
+    .major-grid-line {
+      stroke: #334155;
+      stroke-width: 1.5;
+      stroke-dasharray: 4,4;
+    }
+    .distractor-trace {
+      stroke: #38bdf8;
+      stroke-opacity: 0.35;
+      stroke-width: 1.2;
+      stroke-dasharray: 5,4;
+      fill: none;
+    }
+    .crosshair {
+      stroke: #64748b;
+      stroke-width: 1.2;
+    }
+    .tech-label {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9px;
+      fill: #475569;
+      letter-spacing: 0.5px;
+    }
+    .node-shape {
+      stroke: #020617;
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 1024 1024" width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+    <!-- Technical Distractor Grid & Markings Layer -->
+    <g id="distractor-lines">
+            <line x1="128.00" y1="0.00" x2="128.00" y2="1024.00" class="grid-line" />
+      <line x1="256.00" y1="0.00" x2="256.00" y2="1024.00" class="grid-line" />
+      <line x1="384.00" y1="0.00" x2="384.00" y2="1024.00" class="grid-line" />
+      <line x1="512.00" y1="0.00" x2="512.00" y2="1024.00" class="grid-line" />
+      <line x1="640.00" y1="0.00" x2="640.00" y2="1024.00" class="grid-line" />
+      <line x1="768.00" y1="0.00" x2="768.00" y2="1024.00" class="grid-line" />
+      <line x1="896.00" y1="0.00" x2="896.00" y2="1024.00" class="grid-line" />
+      <line x1="0.00" y1="128.00" x2="1024.00" y2="128.00" class="grid-line" />
+      <line x1="0.00" y1="256.00" x2="1024.00" y2="256.00" class="grid-line" />
+      <line x1="0.00" y1="384.00" x2="1024.00" y2="384.00" class="grid-line" />
+      <line x1="0.00" y1="512.00" x2="1024.00" y2="512.00" class="grid-line" />
+      <line x1="0.00" y1="640.00" x2="1024.00" y2="640.00" class="grid-line" />
+      <line x1="0.00" y1="768.00" x2="1024.00" y2="768.00" class="grid-line" />
+      <line x1="0.00" y1="896.00" x2="1024.00" y2="896.00" class="grid-line" />
+      <line x1="857.53" y1="511.18" x2="956.80" y2="610.45" class="distractor-trace" />
+      <line x1="891.37" y1="695.82" x2="984.00" y2="796.90" class="distractor-trace" />
+      <line x1="677.16" y1="71.67" x2="842.30" y2="71.67" class="distractor-trace" />
+      <line x1="475.03" y1="871.23" x2="568.78" y2="871.23" class="major-grid-line" />
+      <line x1="392.00" y1="733.75" x2="566.11" y2="733.75" class="distractor-trace" />
+      <line x1="200.88" y1="374.23" x2="326.73" y2="374.23" class="major-grid-line" />
+    </g>
+    <g id="crosshairs">
+            <line x1="232.24" y1="472.06" x2="244.32" y2="472.06" class="crosshair" />
+      <line x1="238.28" y1="466.02" x2="238.28" y2="478.11" class="crosshair" />
+      <line x1="170.57" y1="886.12" x2="182.93" y2="886.12" class="crosshair" />
+      <line x1="176.75" y1="879.94" x2="176.75" y2="892.30" class="crosshair" />
+      <line x1="639.48" y1="110.48" x2="651.21" y2="110.48" class="crosshair" />
+      <line x1="645.35" y1="104.62" x2="645.35" y2="116.34" class="crosshair" />
+      <line x1="666.28" y1="573.24" x2="680.37" y2="573.24" class="crosshair" />
+      <line x1="673.32" y1="566.20" x2="673.32" y2="580.29" class="crosshair" />
+      <line x1="484.64" y1="182.35" x2="500.51" y2="182.35" class="crosshair" />
+      <line x1="492.57" y1="174.42" x2="492.57" y2="190.29" class="crosshair" />
+      <line x1="305.09" y1="282.26" x2="320.19" y2="282.26" class="crosshair" />
+      <line x1="312.64" y1="274.71" x2="312.64" y2="289.81" class="crosshair" />
+      <line x1="405.79" y1="902.24" x2="416.92" y2="902.24" class="crosshair" />
+      <line x1="411.36" y1="896.67" x2="411.36" y2="907.81" class="crosshair" />
+      <line x1="797.91" y1="922.72" x2="809.27" y2="922.72" class="crosshair" />
+      <line x1="803.59" y1="917.04" x2="803.59" y2="928.40" class="crosshair" />
+    </g>
+    <g id="tech-labels">
+            <text x="436.5" y="259.3" class="tech-label">SEC-65:X436:Y259</text>
+      <text x="426.3" y="226.7" class="tech-label">SEC-15:X426:Y226</text>
+      <text x="223.2" y="317.2" class="tech-label">SEC-92:X223:Y317</text>
+      <text x="718.8" y="167.8" class="tech-label">SEC-30:X718:Y167</text>
+      <text x="524.6" y="483.9" class="tech-label">SEC-45:X524:Y483</text>
+      <text x="249.0" y="679.9" class="tech-label">SEC-51:X248:Y679</text>
+      <text x="662.6" y="594.2" class="tech-label">SEC-82:X662:Y594</text>
+      <text x="865.8" y="348.0" class="tech-label">SEC-87:X865:Y347</text>
+      <text x="59.2" y="980.0" class="tech-label">SEC-67:X59:Y980</text>
+      <text x="731.0" y="185.9" class="tech-label">SEC-72:X730:Y185</text>
+    </g>
+    <!-- Geometric Nodes Layer (ordered by z-order) -->
+    <g id="nodes">
+            <polygon id="node_0" data-color="yellow" data-z="0" points="154.84,760.00 132.05,799.47 177.63,799.47" fill="#f59e0b" class="node-shape" />
+      <circle id="node_1" data-color="red" data-z="1" cx="142.07" cy="756.29" r="22.94" fill="#ef4444" class="node-shape" />
+      <rect id="node_2" data-color="red" data-z="2" x="106.28" y="689.88" width="56.21" height="56.21" fill="#ef4444" class="node-shape" />
+      <rect id="node_3" data-color="blue" data-z="3" x="84.75" y="705.04" width="41.81" height="41.81" fill="#3b82f6" class="node-shape" />
+      <circle id="node_4" data-color="red" data-z="4" cx="342.93" cy="468.65" r="27.66" fill="#ef4444" class="node-shape" />
+      <circle id="node_5" data-color="yellow" data-z="5" cx="372.37" cy="470.27" r="26.69" fill="#f59e0b" class="node-shape" />
+      <polygon id="node_6" data-color="green" data-z="6" points="405.13,449.66 377.69,497.18 432.56,497.18" fill="#10b981" class="node-shape" />
+      <polygon id="node_7" data-color="red" data-z="7" points="370.49,454.98 351.59,487.72 389.40,487.72" fill="#ef4444" class="node-shape" />
+      <rect id="node_8" data-color="purple" data-z="8" x="507.58" y="505.42" width="42.42" height="42.42" fill="#8b5cf6" class="node-shape" />
+      <circle id="node_9" data-color="red" data-z="9" cx="550.79" cy="518.54" r="22.23" fill="#ef4444" class="node-shape" />
+      <rect id="node_10" data-color="purple" data-z="10" x="533.40" y="458.42" width="56.32" height="56.32" fill="#8b5cf6" class="node-shape" />
+      <polygon id="node_11" data-color="cyan" data-z="11" points="559.28,506.13 535.08,548.05 583.49,548.05" fill="#06b6d4" class="node-shape" />
+      <circle id="node_12" data-color="cyan" data-z="12" cx="511.31" cy="928.91" r="18.93" fill="#06b6d4" class="node-shape" />
+      <circle id="node_13" data-color="red" data-z="13" cx="491.84" cy="916.01" r="23.81" fill="#ef4444" class="node-shape" />
+      <polygon id="node_14" data-color="green" data-z="14" points="480.47,866.14 453.72,912.47 507.21,912.47" fill="#10b981" class="node-shape" />
+      <circle id="node_15" data-color="blue" data-z="15" cx="479.27" cy="862.02" r="26.42" fill="#3b82f6" class="node-shape" />
+      <rect id="node_16" data-color="blue" data-z="16" x="356.68" y="321.75" width="47.26" height="47.26" fill="#3b82f6" class="node-shape" />
+      <rect id="node_17" data-color="green" data-z="17" x="379.11" y="291.84" width="57.64" height="57.64" fill="#10b981" class="node-shape" />
+      <rect id="node_18" data-color="yellow" data-z="18" x="410.25" y="313.74" width="58.58" height="58.58" fill="#f59e0b" class="node-shape" />
+      <circle id="node_19" data-color="blue" data-z="19" cx="854.46" cy="103.01" r="28.99" fill="#3b82f6" class="node-shape" />
+      <circle id="node_20" data-color="blue" data-z="20" cx="630.81" cy="746.22" r="29.35" fill="#3b82f6" class="node-shape" />
+      <rect id="node_21" data-color="blue" data-z="21" x="599.30" y="241.61" width="38.87" height="38.87" fill="#3b82f6" class="node-shape" />
+      <circle id="node_22" data-color="cyan" data-z="22" cx="900.73" cy="410.60" r="20.93" fill="#06b6d4" class="node-shape" />
+      <circle id="node_23" data-color="yellow" data-z="23" cx="505.13" cy="96.48" r="27.43" fill="#f59e0b" class="node-shape" />
+      <rect id="node_24" data-color="blue" data-z="24" x="491.76" y="633.65" width="58.88" height="58.88" fill="#3b82f6" class="node-shape" />
+      <polygon id="node_25" data-color="red" data-z="25" points="793.75,719.94 775.08,752.28 812.42,752.28" fill="#ef4444" class="node-shape" />
+      <rect id="node_26" data-color="blue" data-z="26" x="743.24" y="181.75" width="54.80" height="54.80" fill="#3b82f6" class="node-shape" />
+      <circle id="node_27" data-color="yellow" data-z="27" cx="678.64" cy="525.39" r="19.38" fill="#f59e0b" class="node-shape" />
+    </g>
+  </svg>
+</body>
+</html>

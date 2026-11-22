@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Technical Diagram - Seed 1206 (easy)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 1024px;
+      height: 1024px;
+      overflow: hidden;
+      background-color: #0b1120;
+    }
+    svg {
+      display: block;
+      width: 1024px;
+      height: 1024px;
+      user-select: none;
+    }
+    .grid-line {
+      stroke: #1e293b;
+      stroke-width: 1;
+    }
+    .major-grid-line {
+      stroke: #334155;
+      stroke-width: 1.5;
+      stroke-dasharray: 4,4;
+    }
+    .distractor-trace {
+      stroke: #38bdf8;
+      stroke-opacity: 0.35;
+      stroke-width: 1.2;
+      stroke-dasharray: 5,4;
+      fill: none;
+    }
+    .crosshair {
+      stroke: #64748b;
+      stroke-width: 1.2;
+    }
+    .tech-label {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 9px;
+      fill: #475569;
+      letter-spacing: 0.5px;
+    }
+    .node-shape {
+      stroke: #020617;
+      stroke-width: 2.2;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 1024 1024" width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+    <!-- Technical Distractor Grid & Markings Layer -->
+    <g id="distractor-lines">
+            <line x1="128.00" y1="0.00" x2="128.00" y2="1024.00" class="grid-line" />
+      <line x1="256.00" y1="0.00" x2="256.00" y2="1024.00" class="grid-line" />
+      <line x1="384.00" y1="0.00" x2="384.00" y2="1024.00" class="grid-line" />
+      <line x1="512.00" y1="0.00" x2="512.00" y2="1024.00" class="grid-line" />
+      <line x1="640.00" y1="0.00" x2="640.00" y2="1024.00" class="grid-line" />
+      <line x1="768.00" y1="0.00" x2="768.00" y2="1024.00" class="grid-line" />
+      <line x1="896.00" y1="0.00" x2="896.00" y2="1024.00" class="grid-line" />
+      <line x1="0.00" y1="128.00" x2="1024.00" y2="128.00" class="grid-line" />
+      <line x1="0.00" y1="256.00" x2="1024.00" y2="256.00" class="grid-line" />
+      <line x1="0.00" y1="384.00" x2="1024.00" y2="384.00" class="grid-line" />
+      <line x1="0.00" y1="512.00" x2="1024.00" y2="512.00" class="grid-line" />
+      <line x1="0.00" y1="640.00" x2="1024.00" y2="640.00" class="grid-line" />
+      <line x1="0.00" y1="768.00" x2="1024.00" y2="768.00" class="grid-line" />
+      <line x1="0.00" y1="896.00" x2="1024.00" y2="896.00" class="grid-line" />
+      <line x1="434.48" y1="675.50" x2="531.25" y2="675.50" class="major-grid-line" />
+      <line x1="388.59" y1="399.41" x2="500.08" y2="399.41" class="major-grid-line" />
+      <line x1="51.99" y1="569.50" x2="161.65" y2="569.50" class="major-grid-line" />
+      <line x1="90.49" y1="94.56" x2="208.79" y2="94.56" class="major-grid-line" />
+      <line x1="649.37" y1="767.77" x2="740.26" y2="767.77" class="major-grid-line" />
+      <line x1="157.14" y1="709.18" x2="383.48" y2="709.18" class="distractor-trace" />
+      <line x1="653.03" y1="100.06" x2="813.43" y2="100.06" class="distractor-trace" />
+    </g>
+    <g id="crosshairs">
+            <line x1="612.50" y1="192.36" x2="626.67" y2="192.36" class="crosshair" />
+      <line x1="619.58" y1="185.28" x2="619.58" y2="199.44" class="crosshair" />
+      <line x1="175.40" y1="410.05" x2="189.03" y2="410.05" class="crosshair" />
+      <line x1="182.21" y1="403.24" x2="182.21" y2="416.86" class="crosshair" />
+    </g>
+    <g id="tech-labels">
+            <text x="566.8" y="168.3" class="tech-label">SEC-74:X566:Y168</text>
+    </g>
+    <!-- Geometric Nodes Layer (ordered by z-order) -->
+    <g id="nodes">
+            <rect id="node_hidden_target" data-color="red" data-z="0" x="360.65" y="477.45" width="48.00" height="48.00" fill="#ef4444" class="node-shape" />
+      <rect id="node_cover" data-color="cyan" data-z="1" x="346.25" y="463.05" width="76.80" height="76.80" fill="#06b6d4" class="node-shape" />
+      <polygon id="node_2" data-color="red" data-z="2" points="103.07,235.64 78.72,277.82 127.43,277.82" fill="#ef4444" class="node-shape" />
+      <rect id="node_3" data-color="red" data-z="3" x="45.00" y="240.95" width="66.55" height="66.55" fill="#ef4444" class="node-shape" />
+      <polygon id="node_4" data-color="yellow" data-z="4" points="77.26,236.58 45.00,292.46 109.53,292.46" fill="#f59e0b" class="node-shape" />
+      <polygon id="node_5" data-color="green" data-z="5" points="99.70,269.15 72.13,316.91 127.28,316.91" fill="#10b981" class="node-shape" />
+      <polygon id="node_6" data-color="blue" data-z="6" points="728.25,685.37 695.10,742.79 761.41,742.79" fill="#3b82f6" class="node-shape" />
+      <rect id="node_7" data-color="purple" data-z="7" x="242.74" y="217.71" width="68.03" height="68.03" fill="#8b5cf6" class="node-shape" />
+      <circle id="node_8" data-color="purple" data-z="8" cx="149.99" cy="632.61" r="33.31" fill="#8b5cf6" class="node-shape" />
+      <polygon id="node_9" data-color="red" data-z="9" points="658.98,421.96 634.67,464.06 683.28,464.06" fill="#ef4444" class="node-shape" />
+      <polygon id="node_10" data-color="green" data-z="10" points="576.57,872.01 544.50,927.56 608.64,927.56" fill="#10b981" class="node-shape" />
+      <circle id="node_11" data-color="cyan" data-z="11" cx="771.09" cy="98.28" r="28.46" fill="#06b6d4" class="node-shape" />
+      <polygon id="node_12" data-color="red" data-z="12" points="802.18,512.57 767.25,573.07 837.11,573.07" fill="#ef4444" class="node-shape" />
+      <polygon id="node_13" data-color="purple" data-z="13" points="525.03,757.79 500.15,800.88 549.91,800.88" fill="#8b5cf6" class="node-shape" />
+    </g>
+  </svg>
+</body>
+</html>

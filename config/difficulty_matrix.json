@@ -1,0 +1,26 @@
+{
+  "easy": {
+    "node_count": 12,
+    "occlusion_ratio": 0.25,
+    "distractor_count": 10,
+    "min_node_size": 48,
+    "max_node_size": 72,
+    "description": "Sparse layout with low overlap and minimal distractor gridlines."
+  },
+  "medium": {
+    "node_count": 28,
+    "occlusion_ratio": 0.50,
+    "distractor_count": 24,
+    "min_node_size": 36,
+    "max_node_size": 60,
+    "description": "Moderate density with moderate overlapping nodes and distractor lines."
+  },
+  "hard": {
+    "node_count": 52,
+    "occlusion_ratio": 0.75,
+    "distractor_count": 45,
+    "min_node_size": 28,
+    "max_node_size": 48,
+    "description": "High density technical diagram with extensive multi-layer occlusions and dense grid lines."
+  }
+}

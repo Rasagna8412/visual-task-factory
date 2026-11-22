@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "benchmark": "Visual Task Factory - 2D Spatial Occlusion & Counting",
+    "generated_at": "2026-11-22T10:49:06.710274",
+    "total_models_evaluated": 2
+  },
+  "models": {
+    "mock-frontier-mid": {
+      "open_ended_accuracy": 48.9,
+      "mcq_accuracy": 65.6,
+      "mcq_shortcut_gap": 16.7,
+      "pairwise_consistency": 41.7,
+      "cf_pairs_evaluated": 12,
+      "cf_pairs_consistent": 5,
+      "abstention_accuracy": 55.6,
+      "hallucination_rate": 44.4,
+      "abstention_queries": 18,
+      "accuracy_by_difficulty": {
+        "easy": 76.7,
+        "medium": 40.0,
+        "hard": 30.0
+      },
+      "accuracy_by_occlusion_bucket": {
+        "0-25%": 51.6,
+        "25-50%": 50.0,
+        "50-75%": 14.3,
+        "75-100%": 55.6
+      },
+      "total_queries_evaluated": 180
+    },
+    "mock-frontier-strong": {
+      "open_ended_accuracy": 74.4,
+      "mcq_accuracy": 86.7,
+      "mcq_shortcut_gap": 12.2,
+      "pairwise_consistency": 41.7,
+      "cf_pairs_evaluated": 12,
+      "cf_pairs_consistent": 5,
+      "abstention_accuracy": 83.3,
+      "hallucination_rate": 16.7,
+      "abstention_queries": 18,
+      "accuracy_by_difficulty": {
+        "easy": 80.0,
+        "medium": 73.3,
+        "hard": 70.0
+      },
+      "accuracy_by_occlusion_bucket": {
+        "0-25%": 67.7,
+        "25-50%": 73.5,
+        "50-75%": 85.7,
+        "75-100%": 83.3
+      },
+      "total_queries_evaluated": 180
+    }
+  }
+}

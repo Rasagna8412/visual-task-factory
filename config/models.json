@@ -1,0 +1,43 @@
+{
+  "mock-frontier-strong": {
+    "provider": "mock",
+    "model": "mock-frontier-strong",
+    "description": "Simulated frontier VLM (GPT-4o / Claude 3.5 Sonnet class with high spatial grounding)"
+  },
+  "mock-frontier-mid": {
+    "provider": "mock",
+    "model": "mock-frontier-mid",
+    "description": "Simulated mid-tier VLM exhibiting steep occlusion drop-off and high MCQ guessing reliance"
+  },
+  "gpt-4o": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "env_key": "OPENAI_API_KEY",
+    "description": "OpenAI GPT-4o Omni Vision API"
+  },
+  "claude-3-5-sonnet": {
+    "provider": "anthropic",
+    "model": "claude-3-5-sonnet-20241022",
+    "env_key": "ANTHROPIC_API_KEY",
+    "description": "Anthropic Claude 3.5 Sonnet Vision API"
+  },
+  "gemini-1.5-pro": {
+    "provider": "gemini",
+    "model": "gemini-1.5-pro",
+    "env_key": "GEMINI_API_KEY",
+    "description": "Google Gemini 1.5 Pro Multimodal API"
+  },
+  "custom-vlm": {
+    "provider": "openai",
+    "model": "custom-vlm",
+    "base_url_env": "CUSTOM_VLM_BASE_URL",
+    "env_key": "CUSTOM_VLM_API_KEY",
+    "description": "Custom InnoData Hackathon Gateway or OpenRouter endpoint"
+  },
+  "ollama-vision": {
+    "provider": "ollama",
+    "model": "llava:latest",
+    "base_url": "http://localhost:11434",
+    "description": "Local Ollama LLaVA Vision endpoint"
+  }
+}
