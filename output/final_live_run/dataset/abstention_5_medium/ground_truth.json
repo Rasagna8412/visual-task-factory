@@ -1,0 +1,1359 @@
+{
+  "metadata": {
+    "seed": 1247,
+    "difficulty": "medium",
+    "mode": "unanswerable",
+    "canvas_width": 1024,
+    "canvas_height": 1024,
+    "total_nodes": 30,
+    "total_distractor_lines": 27,
+    "total_crosshairs": 6,
+    "validation_status": "PASSED",
+    "task_id": "abstention_5_medium"
+  },
+  "nodes": [
+    {
+      "id": "node_hidden_target",
+      "shape": "square",
+      "color": "purple",
+      "hex_color": "#8b5cf6",
+      "center": [
+        728.97,
+        178.8
+      ],
+      "size": 36,
+      "z_order": 0,
+      "bbox": [
+        710.97,
+        160.8,
+        746.97,
+        196.8
+      ],
+      "area": 1296,
+      "visible_area": 0.0,
+      "occlusion_ratio": 1.0,
+      "is_occluded": true,
+      "is_partially_occluded": false,
+      "is_completely_occluded": true,
+      "is_unanswerable_target": true,
+      "occluded_by": [
+        "node_cover"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_cover",
+      "shape": "square",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        728.97,
+        178.8
+      ],
+      "size": 57.6,
+      "z_order": 1,
+      "bbox": [
+        700.17,
+        150.0,
+        757.77,
+        207.6
+      ],
+      "area": 3317.76,
+      "visible_area": 3317.76,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_hidden_target"
+      ]
+    },
+    {
+      "id": "node_2",
+      "shape": "triangle",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        284.53,
+        882.64
+      ],
+      "size": 56.73,
+      "z_order": 2,
+      "bbox": [
+        256.17,
+        858.08,
+        312.9,
+        907.21
+      ],
+      "area": 1393.47,
+      "visible_area": 438.14,
+      "occlusion_ratio": 0.6856,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_3",
+        "node_4"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_3",
+      "shape": "square",
+      "color": "blue",
+      "hex_color": "#3b82f6",
+      "center": [
+        310.03,
+        916.32
+      ],
+      "size": 54.49,
+      "z_order": 3,
+      "bbox": [
+        282.79,
+        889.08,
+        337.28,
+        943.57
+      ],
+      "area": 2969.29,
+      "visible_area": 1244.7,
+      "occlusion_ratio": 0.5808,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_4",
+        "node_5"
+      ],
+      "occluding": [
+        "node_2"
+      ]
+    },
+    {
+      "id": "node_4",
+      "shape": "triangle",
+      "color": "cyan",
+      "hex_color": "#06b6d4",
+      "center": [
+        285.41,
+        891.6
+      ],
+      "size": 53.15,
+      "z_order": 4,
+      "bbox": [
+        258.84,
+        868.58,
+        311.99,
+        914.61
+      ],
+      "area": 1223.3,
+      "visible_area": 1211.81,
+      "occlusion_ratio": 0.0094,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_2",
+        "node_3"
+      ]
+    },
+    {
+      "id": "node_5",
+      "shape": "triangle",
+      "color": "green",
+      "hex_color": "#10b981",
+      "center": [
+        316.51,
+        922.72
+      ],
+      "size": 57.39,
+      "z_order": 5,
+      "bbox": [
+        287.81,
+        897.86,
+        345.2,
+        947.57
+      ],
+      "area": 1426.31,
+      "visible_area": 1426.31,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_3"
+      ]
+    },
+    {
+      "id": "node_6",
+      "shape": "square",
+      "color": "cyan",
+      "hex_color": "#06b6d4",
+      "center": [
+        104.63,
+        670.1
+      ],
+      "size": 56.91,
+      "z_order": 6,
+      "bbox": [
+        76.17,
+        641.65,
+        133.08,
+        698.56
+      ],
+      "area": 3238.22,
+      "visible_area": 2144.24,
+      "occlusion_ratio": 0.3378,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_7",
+        "node_8",
+        "node_9"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_7",
+      "shape": "circle",
+      "color": "cyan",
+      "hex_color": "#06b6d4",
+      "center": [
+        84.1,
+        652.03
+      ],
+      "size": 43.54,
+      "z_order": 7,
+      "bbox": [
+        62.33,
+        630.26,
+        105.87,
+        673.8
+      ],
+      "area": 1488.77,
+      "visible_area": 1413.87,
+      "occlusion_ratio": 0.0503,
+      "is_occluded": true,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_8"
+      ],
+      "occluding": [
+        "node_6"
+      ]
+    },
+    {
+      "id": "node_8",
+      "shape": "triangle",
+      "color": "purple",
+      "hex_color": "#8b5cf6",
+      "center": [
+        71.13,
+        676.35
+      ],
+      "size": 41.43,
+      "z_order": 8,
+      "bbox": [
+        50.42,
+        658.41,
+        91.85,
+        694.29
+      ],
+      "area": 743.36,
+      "visible_area": 600.6,
+      "occlusion_ratio": 0.192,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_9"
+      ],
+      "occluding": [
+        "node_6",
+        "node_7"
+      ]
+    },
+    {
+      "id": "node_9",
+      "shape": "triangle",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        77.74,
+        697.63
+      ],
+      "size": 44.03,
+      "z_order": 9,
+      "bbox": [
+        55.73,
+        678.57,
+        99.75,
+        716.7
+      ],
+      "area": 839.32,
+      "visible_area": 839.32,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_6",
+        "node_8"
+      ]
+    },
+    {
+      "id": "node_10",
+      "shape": "triangle",
+      "color": "blue",
+      "hex_color": "#3b82f6",
+      "center": [
+        270.37,
+        406.38
+      ],
+      "size": 42.84,
+      "z_order": 10,
+      "bbox": [
+        248.95,
+        387.83,
+        291.78,
+        424.93
+      ],
+      "area": 794.61,
+      "visible_area": 789.2,
+      "occlusion_ratio": 0.0068,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_11",
+      "shape": "triangle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        300.55,
+        425.58
+      ],
+      "size": 50.7,
+      "z_order": 11,
+      "bbox": [
+        275.2,
+        403.63,
+        325.89,
+        447.53
+      ],
+      "area": 1112.97,
+      "visible_area": 1014.0,
+      "occlusion_ratio": 0.0889,
+      "is_occluded": true,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_12"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_12",
+      "shape": "triangle",
+      "color": "cyan",
+      "hex_color": "#06b6d4",
+      "center": [
+        314.72,
+        451.93
+      ],
+      "size": 40.39,
+      "z_order": 12,
+      "bbox": [
+        294.52,
+        434.44,
+        334.91,
+        469.42
+      ],
+      "area": 706.52,
+      "visible_area": 324.29,
+      "occlusion_ratio": 0.541,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_13"
+      ],
+      "occluding": [
+        "node_11"
+      ]
+    },
+    {
+      "id": "node_13",
+      "shape": "circle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        315.49,
+        482.41
+      ],
+      "size": 51.54,
+      "z_order": 13,
+      "bbox": [
+        289.72,
+        456.63,
+        341.26,
+        508.18
+      ],
+      "area": 2086.52,
+      "visible_area": 2086.31,
+      "occlusion_ratio": 0.0001,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_12"
+      ]
+    },
+    {
+      "id": "node_14",
+      "shape": "square",
+      "color": "green",
+      "hex_color": "#10b981",
+      "center": [
+        775.88,
+        636.58
+      ],
+      "size": 38.81,
+      "z_order": 14,
+      "bbox": [
+        756.48,
+        617.18,
+        795.29,
+        655.99
+      ],
+      "area": 1506.21,
+      "visible_area": 1009.75,
+      "occlusion_ratio": 0.3296,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_15"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_15",
+      "shape": "circle",
+      "color": "cyan",
+      "hex_color": "#06b6d4",
+      "center": [
+        779.98,
+        668.75
+      ],
+      "size": 56.73,
+      "z_order": 15,
+      "bbox": [
+        751.62,
+        640.38,
+        808.35,
+        697.11
+      ],
+      "area": 2527.69,
+      "visible_area": 901.98,
+      "occlusion_ratio": 0.6432,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_16",
+        "node_17"
+      ],
+      "occluding": [
+        "node_14"
+      ]
+    },
+    {
+      "id": "node_16",
+      "shape": "triangle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        796.57,
+        693.63
+      ],
+      "size": 37.31,
+      "z_order": 16,
+      "bbox": [
+        777.91,
+        677.47,
+        815.22,
+        709.78
+      ],
+      "area": 602.84,
+      "visible_area": 374.81,
+      "occlusion_ratio": 0.3783,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_17"
+      ],
+      "occluding": [
+        "node_15"
+      ]
+    },
+    {
+      "id": "node_17",
+      "shape": "square",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        785.22,
+        676.24
+      ],
+      "size": 42.42,
+      "z_order": 17,
+      "bbox": [
+        764.01,
+        655.03,
+        806.43,
+        697.45
+      ],
+      "area": 1799.2,
+      "visible_area": 1799.2,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_15",
+        "node_16"
+      ]
+    },
+    {
+      "id": "node_18",
+      "shape": "circle",
+      "color": "green",
+      "hex_color": "#10b981",
+      "center": [
+        242.39,
+        688.47
+      ],
+      "size": 55.53,
+      "z_order": 18,
+      "bbox": [
+        214.62,
+        660.7,
+        270.15,
+        716.23
+      ],
+      "area": 2422.0,
+      "visible_area": 1465.14,
+      "occlusion_ratio": 0.3951,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_19",
+        "node_20"
+      ],
+      "occluding": []
+    },
+    {
+      "id": "node_19",
+      "shape": "square",
+      "color": "green",
+      "hex_color": "#10b981",
+      "center": [
+        221.1,
+        669.54
+      ],
+      "size": 51.35,
+      "z_order": 19,
+      "bbox": [
+        195.42,
+        643.86,
+        246.78,
+        695.21
+      ],
+      "area": 2637.07,
+      "visible_area": 1647.29,
+      "occlusion_ratio": 0.3753,
+      "is_occluded": true,
+      "is_partially_occluded": true,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [
+        "node_20"
+      ],
+      "occluding": [
+        "node_18"
+      ]
+    },
+    {
+      "id": "node_20",
+      "shape": "square",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        225.39,
+        637.87
+      ],
+      "size": 53.22,
+      "z_order": 20,
+      "bbox": [
+        198.78,
+        611.27,
+        252.0,
+        664.48
+      ],
+      "area": 2832.18,
+      "visible_area": 2832.18,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": [
+        "node_18",
+        "node_19"
+      ]
+    },
+    {
+      "id": "node_21",
+      "shape": "circle",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        399.77,
+        715.51
+      ],
+      "size": 55.13,
+      "z_order": 21,
+      "bbox": [
+        372.2,
+        687.94,
+        427.34,
+        743.07
+      ],
+      "area": 2387.37,
+      "visible_area": 2387.13,
+      "occlusion_ratio": 0.0001,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_22",
+      "shape": "triangle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        112.16,
+        242.28
+      ],
+      "size": 48.35,
+      "z_order": 22,
+      "bbox": [
+        87.98,
+        221.35,
+        136.34,
+        263.22
+      ],
+      "area": 1012.46,
+      "visible_area": 1012.46,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_23",
+      "shape": "circle",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        802.34,
+        540.36
+      ],
+      "size": 46.13,
+      "z_order": 23,
+      "bbox": [
+        779.27,
+        517.29,
+        825.4,
+        563.43
+      ],
+      "area": 1671.62,
+      "visible_area": 1671.45,
+      "occlusion_ratio": 0.0001,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_24",
+      "shape": "circle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        677.3,
+        490.39
+      ],
+      "size": 49.08,
+      "z_order": 24,
+      "bbox": [
+        652.76,
+        465.85,
+        701.84,
+        514.93
+      ],
+      "area": 1891.75,
+      "visible_area": 1891.56,
+      "occlusion_ratio": 0.0001,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_25",
+      "shape": "triangle",
+      "color": "purple",
+      "hex_color": "#8b5cf6",
+      "center": [
+        454.49,
+        351.25
+      ],
+      "size": 41.63,
+      "z_order": 25,
+      "bbox": [
+        433.68,
+        333.22,
+        475.31,
+        369.28
+      ],
+      "area": 750.56,
+      "visible_area": 750.56,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_26",
+      "shape": "square",
+      "color": "green",
+      "hex_color": "#10b981",
+      "center": [
+        914.36,
+        241.42
+      ],
+      "size": 43.95,
+      "z_order": 26,
+      "bbox": [
+        892.39,
+        219.45,
+        936.34,
+        263.4
+      ],
+      "area": 1931.85,
+      "visible_area": 1931.85,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_27",
+      "shape": "triangle",
+      "color": "blue",
+      "hex_color": "#3b82f6",
+      "center": [
+        588.85,
+        930.61
+      ],
+      "size": 37.59,
+      "z_order": 27,
+      "bbox": [
+        570.06,
+        914.33,
+        607.64,
+        946.88
+      ],
+      "area": 611.74,
+      "visible_area": 611.74,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_28",
+      "shape": "square",
+      "color": "yellow",
+      "hex_color": "#f59e0b",
+      "center": [
+        85.85,
+        842.35
+      ],
+      "size": 45.83,
+      "z_order": 28,
+      "bbox": [
+        62.94,
+        819.43,
+        108.77,
+        865.26
+      ],
+      "area": 2100.6,
+      "visible_area": 2100.6,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    },
+    {
+      "id": "node_29",
+      "shape": "triangle",
+      "color": "red",
+      "hex_color": "#ef4444",
+      "center": [
+        559.2,
+        647.47
+      ],
+      "size": 59.44,
+      "z_order": 29,
+      "bbox": [
+        529.48,
+        621.73,
+        588.92,
+        673.21
+      ],
+      "area": 1530.03,
+      "visible_area": 1530.03,
+      "occlusion_ratio": 0.0,
+      "is_occluded": false,
+      "is_partially_occluded": false,
+      "is_completely_occluded": false,
+      "is_unanswerable_target": false,
+      "occluded_by": [],
+      "occluding": []
+    }
+  ],
+  "distractors": [
+    {
+      "type": "grid_v",
+      "from": [
+        128,
+        0
+      ],
+      "to": [
+        128,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        256,
+        0
+      ],
+      "to": [
+        256,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        384,
+        0
+      ],
+      "to": [
+        384,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        512,
+        0
+      ],
+      "to": [
+        512,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        640,
+        0
+      ],
+      "to": [
+        640,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        768,
+        0
+      ],
+      "to": [
+        768,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_v",
+      "from": [
+        896,
+        0
+      ],
+      "to": [
+        896,
+        1024
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        128
+      ],
+      "to": [
+        1024,
+        128
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        256
+      ],
+      "to": [
+        1024,
+        256
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        384
+      ],
+      "to": [
+        1024,
+        384
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        512
+      ],
+      "to": [
+        1024,
+        512
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        640
+      ],
+      "to": [
+        1024,
+        640
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        768
+      ],
+      "to": [
+        1024,
+        768
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "grid_h",
+      "from": [
+        0,
+        896
+      ],
+      "to": [
+        1024,
+        896
+      ],
+      "stroke_style": "grid-line"
+    },
+    {
+      "type": "trace",
+      "from": [
+        952.41,
+        983.05
+      ],
+      "to": [
+        893.17,
+        984.0
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "trace",
+      "from": [
+        629.21,
+        388.6
+      ],
+      "to": [
+        747.7,
+        507.1
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "trace",
+      "from": [
+        514.35,
+        887.36
+      ],
+      "to": [
+        514.35,
+        984.0
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "trace",
+      "from": [
+        254.16,
+        94.37
+      ],
+      "to": [
+        359.42,
+        94.37
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "dimension",
+      "from": [
+        688.47,
+        304.8
+      ],
+      "to": [
+        825.92,
+        304.8
+      ],
+      "stroke_style": "major-grid-line"
+    },
+    {
+      "type": "dimension",
+      "from": [
+        711.53,
+        405.5
+      ],
+      "to": [
+        840.53,
+        405.5
+      ],
+      "stroke_style": "major-grid-line"
+    },
+    {
+      "type": "trace",
+      "from": [
+        99.9,
+        881.81
+      ],
+      "to": [
+        288.46,
+        881.81
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "dimension",
+      "from": [
+        638.5,
+        201.01
+      ],
+      "to": [
+        758.6,
+        201.01
+      ],
+      "stroke_style": "major-grid-line"
+    },
+    {
+      "type": "dimension",
+      "from": [
+        335.49,
+        242.5
+      ],
+      "to": [
+        470.24,
+        242.5
+      ],
+      "stroke_style": "major-grid-line"
+    },
+    {
+      "type": "trace",
+      "from": [
+        977.14,
+        928.77
+      ],
+      "to": [
+        984.0,
+        984.0
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "trace",
+      "from": [
+        823.92,
+        57.53
+      ],
+      "to": [
+        923.76,
+        57.53
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "dimension",
+      "from": [
+        169.71,
+        965.32
+      ],
+      "to": [
+        296.18,
+        965.32
+      ],
+      "stroke_style": "major-grid-line"
+    },
+    {
+      "type": "trace",
+      "from": [
+        784.65,
+        80.01
+      ],
+      "to": [
+        869.8,
+        80.01
+      ],
+      "stroke_style": "distractor-trace"
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        397.36,
+        748.54
+      ],
+      "size": 13.97
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        473.23,
+        327.33
+      ],
+      "size": 15.59
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        207.39,
+        879.59
+      ],
+      "size": 10.46
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        855.78,
+        208.62
+      ],
+      "size": 13.23
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        837.82,
+        721.67
+      ],
+      "size": 15.73
+    },
+    {
+      "type": "crosshair",
+      "center": [
+        431.19,
+        103.65
+      ],
+      "size": 15.02
+    }
+  ],
+  "qa_pairs": [
+    {
+      "question_id": "q1",
+      "type": "abstention",
+      "is_unanswerable": true,
+      "criteria": {
+        "is_unanswerable": true
+      },
+      "matching_node_ids": [
+        "node_hidden_target"
+      ],
+      "open_ended": {
+        "question": "What is the exact shape and color of the node occluded completely beneath the yellow square near coordinates (728, 178)? If it cannot be visually determined, answer 'cannot_determine'.",
+        "answer": "cannot_determine"
+      },
+      "mcq": {
+        "question": "What is the exact shape and color of the node occluded completely beneath the yellow square near coordinates (728, 178)? If it cannot be visually determined, answer 'cannot_determine'.\nA) yellow square\nB) purple circle\nC) green triangle\nD) cannot_determine",
+        "options": {
+          "A": "yellow square",
+          "B": "purple circle",
+          "C": "green triangle",
+          "D": "cannot_determine"
+        },
+        "correct_option": "D",
+        "answer": "cannot_determine"
+      },
+      "question": "What is the exact shape and color of the node occluded completely beneath the yellow square near coordinates (728, 178)? If it cannot be visually determined, answer 'cannot_determine'.",
+      "answer": "cannot_determine"
+    },
+    {
+      "question_id": "q2",
+      "type": "total_partially_occluded",
+      "criteria": {
+        "is_partially_occluded": true
+      },
+      "matching_node_ids": [
+        "node_2",
+        "node_3",
+        "node_6",
+        "node_8",
+        "node_12",
+        "node_14",
+        "node_15",
+        "node_16",
+        "node_18",
+        "node_19"
+      ],
+      "open_ended": {
+        "question": "What is the total number of partially occluded shapes in the diagram?",
+        "answer": "10"
+      },
+      "mcq": {
+        "question": "What is the total number of partially occluded shapes in the diagram?\nA) 12\nB) 10\nC) 8\nD) 11",
+        "options": {
+          "A": "12",
+          "B": "10",
+          "C": "8",
+          "D": "11"
+        },
+        "correct_option": "B",
+        "answer": "10"
+      },
+      "question": "What is the total number of partially occluded shapes in the diagram?",
+      "answer": 10
+    },
+    {
+      "question_id": "q3",
+      "type": "unoccluded_color",
+      "criteria": {
+        "color": "cyan",
+        "is_occluded": false
+      },
+      "matching_node_ids": [
+        "node_4"
+      ],
+      "open_ended": {
+        "question": "How many cyan shapes are completely unoccluded?",
+        "answer": "1"
+      },
+      "mcq": {
+        "question": "How many cyan shapes are completely unoccluded?\nA) 1\nB) 3\nC) 4\nD) 0",
+        "options": {
+          "A": "1",
+          "B": "3",
+          "C": "4",
+          "D": "0"
+        },
+        "correct_option": "A",
+        "answer": "1"
+      },
+      "question": "How many cyan shapes are completely unoccluded?",
+      "answer": 1
+    }
+  ]
+}

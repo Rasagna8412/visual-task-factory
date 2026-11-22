@@ -93,6 +93,8 @@ class DashboardBuilder:
                 continue
 
             meta = data.get("metadata", {})
+            if meta.get("validation_status") == "REJECTED":
+                continue
             twin_type = meta.get("twin_type")
             if twin_type in ["base", "counterfactual"]:
                 match = re.match(r"(pair_\d+)", folder.name)
@@ -144,7 +146,10 @@ class DashboardBuilder:
             except Exception:
                 continue
 
-            if data.get("metadata", {}).get("mode") == "unanswerable":
+            if (
+                data.get("metadata", {}).get("mode") == "unanswerable"
+                and data.get("metadata", {}).get("validation_status") != "REJECTED"
+            ):
                 hidden = next((n for n in data.get("nodes", []) if n.get("is_unanswerable_target")), {})
                 cover = next((n for n in data.get("nodes", []) if n.get("id") == "node_cover"), {})
                 qa0 = data.get("qa_pairs", [{}])[0]

@@ -70,7 +70,9 @@ class ReportGenerator:
         ax.set_xticklabels(display_diffs, fontsize=10, fontweight="bold")
         ax.set_ylim(0, 115)
         ax.grid(axis="y", linestyle="--", alpha=0.35)
-        ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
+        handles, labels = ax.get_legend_handles_labels()
+        if labels:
+            ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
         plt.tight_layout()
 
         out_path = self.charts_dir / "accuracy_by_difficulty.png"
@@ -105,7 +107,9 @@ class ReportGenerator:
         ax.set_xticklabels(dim_labels, fontsize=10, fontweight="bold")
         ax.set_ylim(0, 115)
         ax.grid(axis="y", linestyle="--", alpha=0.35)
-        ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
+        handles, labels = ax.get_legend_handles_labels()
+        if labels:
+            ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
         plt.tight_layout()
 
         out_path = self.charts_dir / "consistency_and_mcq_gap.png"
@@ -137,7 +141,9 @@ class ReportGenerator:
         ax.set_xticklabels(bucket_keys, fontsize=10, fontweight="bold")
         ax.set_ylim(0, 115)
         ax.grid(True, linestyle="--", alpha=0.35)
-        ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
+        handles, labels = ax.get_legend_handles_labels()
+        if labels:
+            ax.legend(frameon=True, facecolor="#f8fafc", edgecolor="#cbd5e1", fontsize=9.5)
         plt.tight_layout()
 
         out_path = self.charts_dir / "occlusion_dropoff.png"

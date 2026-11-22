@@ -1,0 +1,18 @@
+# Environment & Credentials
+.env
+
+# Python Virtual Environment & Bytecode
+.venv/
+__pycache__/
+*.pyc
+
+# Temporary Benchmark & Smoke Test Folders
+output/smoke_test/
+output/run_42/
+output/live_filter_test/
+output/live_filter_verified/
+output/benchmark/
+output/nonexistent_folder/
+
+# Explicitly keep final live run tracked for judges
+!output/final_live_run/

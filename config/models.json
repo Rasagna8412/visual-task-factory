@@ -39,5 +39,17 @@
     "model": "llava:latest",
     "base_url": "http://localhost:11434",
     "description": "Local Ollama LLaVA Vision endpoint"
+  },
+  "qwen2.5vl-3b": {
+    "provider": "ollama",
+    "model": "qwen2.5vl:3b",
+    "base_url": "http://localhost:11434",
+    "description": "Local Ollama Qwen2.5-VL 3B Vision endpoint"
+  },
+  "moondream": {
+    "provider": "ollama",
+    "model": "moondream",
+    "base_url": "http://localhost:11434",
+    "description": "Local Ollama Moondream 2 Vision endpoint"
   }
 }

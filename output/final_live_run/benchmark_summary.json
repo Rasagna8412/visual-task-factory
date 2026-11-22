@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "benchmark": "Visual Task Factory - 2D Spatial Occlusion & Counting",
+    "generated_at": "2026-11-22T16:25:54.050109",
+    "total_models_evaluated": 2
+  },
+  "models": {
+    "moondream": {
+      "open_ended_accuracy": 0.0,
+      "mcq_accuracy": 35.6,
+      "mcq_shortcut_gap": 35.6,
+      "pairwise_consistency": 0.0,
+      "cf_pairs_evaluated": 12,
+      "cf_pairs_consistent": 0,
+      "abstention_accuracy": 0.0,
+      "hallucination_rate": 100.0,
+      "abstention_queries": 15,
+      "accuracy_by_difficulty": {
+        "easy": 0.0,
+        "medium": 0.0,
+        "hard": 0.0
+      },
+      "accuracy_by_occlusion_bucket": {
+        "0-25%": 0.0,
+        "25-50%": 0.0,
+        "50-75%": 0.0,
+        "75-100%": 0.0
+      },
+      "total_queries_evaluated": 174
+    },
+    "qwen2.5vl-3b": {
+      "open_ended_accuracy": 35.6,
+      "mcq_accuracy": 40.2,
+      "mcq_shortcut_gap": 4.6,
+      "pairwise_consistency": 0.0,
+      "cf_pairs_evaluated": 12,
+      "cf_pairs_consistent": 0,
+      "abstention_accuracy": 46.7,
+      "hallucination_rate": 53.3,
+      "abstention_queries": 15,
+      "accuracy_by_difficulty": {
+        "easy": 50.0,
+        "medium": 33.3,
+        "hard": 23.3
+      },
+      "accuracy_by_occlusion_bucket": {
+        "0-25%": 44.1,
+        "25-50%": 21.9,
+        "50-75%": 33.3,
+        "75-100%": 46.7
+      },
+      "total_queries_evaluated": 174
+    }
+  }
+}

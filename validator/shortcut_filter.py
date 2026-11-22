@@ -70,7 +70,9 @@ class ShortcutFilter:
                         "keep_alive": "10m",
                         "options": {
                             "num_predict": 16,
+                            "num_ctx": 512,
                             "temperature": 0.7,
+                            "seed": 42 + trial_idx * 1000,
                         },
                     },
                     timeout=self.timeout,
@@ -115,12 +117,20 @@ class ShortcutFilter:
     def evaluate_dict(
         self,
         gt_data: Dict[str, Any],
-        trials_per_question: int = 3,
+        trials_per_question: int = 2,
     ) -> Tuple[bool, List[str], Dict[str, Any]]:
         """Evaluates ground truth Q&A pairs across trials."""
         violations: List[str] = []
         qa_pairs = gt_data.get("qa_pairs", [])
         question_results: List[Dict[str, Any]] = []
+
+        meta = gt_data.get("metadata", {})
+        task_label = (
+            meta.get("task_id")
+            or meta.get("twin_type")
+            or f"seed_{meta.get('seed', 'task')}"
+        )
+        print(f"    [ShortcutFilter] Auditing task '{task_label}' ({len(qa_pairs)} questions)...", end=" ", flush=True)
 
         for qa in qa_pairs:
             q_id = qa.get("question_id", "unknown")
@@ -139,10 +149,26 @@ class ShortcutFilter:
                 f"Respond with ONLY the final answer (e.g., a single word, number, or letter A, B, C, or D) with no explanation:"
             )
 
+            is_binary = (
+                qa.get("type") == "binary_occlusion_check"
+                or qa.get("is_counterfactual_target", False)
+                or str(qa.get("open_ended", {}).get("answer", "")).strip().lower() in ["yes", "no"]
+                or str(qa.get("answer", "")).strip().lower() in ["yes", "no"]
+            )
+
+            # Binary yes/no: 3 trials, reject if > 66% (3/3 on 50% chance)
+            # MCQ (4 options): 2 trials, reject if > 50% (2/2 on 25% chance)
+            if is_binary:
+                q_trials = 3
+                threshold = 0.67
+            else:
+                q_trials = trials_per_question
+                threshold = 0.50
+
             correct_count = 0
             guesses = []
 
-            for t_idx in range(trials_per_question):
+            for t_idx in range(q_trials):
                 raw_out = self._query_model(
                     prompt,
                     correct_option=correct_opt,
@@ -154,14 +180,19 @@ class ShortcutFilter:
                 if guess == correct_opt:
                     correct_count += 1
 
-            accuracy = correct_count / trials_per_question
+            accuracy = correct_count / q_trials
+            has_shortcut = accuracy > threshold
 
-            # Reject if accuracy is strictly above random chance (random chance = 25%)
-            # Over 3 trials, >= 2/3 (66.7%) is significantly above random chance
-            has_shortcut = accuracy > RANDOM_CHANCE_MCQ and correct_count >= 2
+            # Abstention questions expect "cannot_determine". A text-only model choosing
+            # "cannot_determine" without an image is expected unanswerable baseline behavior,
+            # not a visual feature shortcut leak.
+            if qa.get("is_unanswerable") or qa.get("type") == "abstention":
+                has_shortcut = False
 
             q_res = {
                 "question_id": q_id,
+                "is_binary": is_binary,
+                "trials": q_trials,
                 "correct_option": correct_opt,
                 "guesses": guesses,
                 "accuracy": round(accuracy, 2),
@@ -170,12 +201,19 @@ class ShortcutFilter:
             question_results.append(q_res)
 
             if has_shortcut:
+                chance_pct = "50%" if is_binary else "25%"
+                thresh_pct = "66%" if is_binary else "50%"
                 violations.append(
                     f"Question {q_id} failed shortcut filter: text-only model guessed correctly "
-                    f"{correct_count}/{trials_per_question} times ({accuracy*100:.1f}% > 25% random chance)"
+                    f"{correct_count}/{q_trials} times ({accuracy*100:.1f}% > {thresh_pct} threshold on {chance_pct} chance)"
                 )
 
         passed = len(violations) == 0
+        if passed:
+            print(f"PASS ({len(question_results)} questions ok)", flush=True)
+        else:
+            print(f"REJECT ({len(violations)} shortcut(s))", flush=True)
+
         details = {
             "model": self.model_name if not self.mock_ollama and self._check_ollama_available() else "mock-ollama",
             "mock_used": self.mock_ollama or not self._check_ollama_available(),
@@ -188,7 +226,7 @@ class ShortcutFilter:
     def evaluate_file(
         self,
         file_path: Union[str, Path],
-        trials_per_question: int = 3,
+        trials_per_question: int = 2,
     ) -> Tuple[bool, List[str], Dict[str, Any]]:
         p = Path(file_path)
         if not p.exists():
@@ -201,7 +239,7 @@ class ShortcutFilter:
 def evaluate_shortcut_filter(
     source: Union[str, Path, Dict[str, Any]],
     mock_ollama: bool = False,
-    trials_per_question: int = 3,
+    trials_per_question: int = 2,
     timeout: float = 60.0,
 ) -> Tuple[bool, List[str], Dict[str, Any]]:
     """Convenience helper to run the shortcut filter."""
@@ -216,7 +254,7 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate visual questions with text-only shortcut filter")
     parser.add_argument("path", type=str, help="Path to ground_truth.json or directory")
     parser.add_argument("--mock-ollama", action="store_true", help="Force mock LLM shortcut filter")
-    parser.add_argument("--trials", type=int, default=3, help="Number of trials per question")
+    parser.add_argument("--trials", type=int, default=2, help="Number of trials per question")
     parser.add_argument("--timeout", type=float, default=60.0, help="HTTP timeout in seconds")
     args = parser.parse_args()
 

@@ -51,12 +51,14 @@ class VLMClient:
         api_key: Optional[str] = None,
         base_url: Optional[str] = None,
         timeout: float = 30.0,
+        endpoint_model: Optional[str] = None,
     ) -> None:
         self.provider = provider.lower()
         self.model = model
+        self.endpoint_model = endpoint_model or model
         self.api_key = api_key or os.getenv("VLM_API_KEY") or os.getenv("OPENAI_API_KEY") or ""
         self.base_url = base_url
-        self.timeout = timeout
+        self.timeout = 180.0 if self.provider in ["ollama", "local"] else timeout
 
     async def query(
         self,
@@ -88,7 +90,9 @@ class VLMClient:
             elif self.provider in ["anthropic", "claude"]:
                 raw_text, meta = await self._query_anthropic(client, prompt, b64_image)
             elif self.provider in ["ollama", "local"]:
-                raw_text, meta = await self._query_ollama(client, prompt, b64_image)
+                raw_text, meta = await self._query_ollama(
+                    client, prompt, b64_image, task_context, image_path=image_path
+                )
             else:
                 raise ValueError(f"Unknown VLM provider: '{self.provider}'")
 
@@ -192,19 +196,72 @@ class VLMClient:
         return text, {}
 
     async def _query_ollama(
-        self, client: httpx.AsyncClient, prompt: str, b64_image: str
+        self,
+        client: httpx.AsyncClient,
+        prompt: str,
+        b64_image: str,
+        task_context: Optional[Dict[str, Any]] = None,
+        image_path: Optional[Union[str, Path]] = None,
     ) -> Tuple[str, Dict[str, Any]]:
+        # 1. Resize image in-memory to 512x512 before base64 encoding (4x visual token reduction)
+        ollama_b64 = b64_image
+        if image_path or b64_image:
+            try:
+                from PIL import Image
+                import io
+
+                img = None
+                if image_path and Path(image_path).exists():
+                    img = Image.open(image_path)
+                elif b64_image:
+                    img = Image.open(io.BytesIO(base64.b64decode(b64_image)))
+
+                if img is not None:
+                    resample_filter = getattr(Image, "Resampling", Image).LANCZOS
+                    resized = img.resize((512, 512), resample=resample_filter)
+                    buf = io.BytesIO()
+                    resized.save(buf, format="PNG")
+                    ollama_b64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+            except Exception:
+                pass
+
         url = (self.base_url or "http://localhost:11434").rstrip("/") + "/api/generate"
         payload = {
-            "model": self.model,
+            "model": self.endpoint_model,
             "prompt": prompt,
-            "images": [b64_image] if b64_image else [],
+            "images": [ollama_b64] if ollama_b64 else [],
             "stream": False,
+            "keep_alive": "10m",
+            "options": {
+                "num_predict": 24,
+                "num_ctx": 2048,
+            },
         }
-        resp = await client.post(url, json=payload)
-        resp.raise_for_status()
-        text = resp.json().get("response", "").strip()
-        return text, {}
+
+        task_label = ""
+        if task_context:
+            t_id = task_context.get("task_id", "")
+            q_id = task_context.get("question_id", "")
+            fmt = task_context.get("format", "")
+            if t_id and q_id:
+                task_label = f"[{t_id} {q_id} {fmt}] "
+            elif q_id:
+                task_label = f"[{q_id} {fmt}] "
+
+        print(f"    [Ollama Vision] {task_label}Querying '{self.endpoint_model}'...", end=" ", flush=True)
+
+        try:
+            resp = await client.post(url, json=payload, timeout=180.0)
+            resp.raise_for_status()
+            text = resp.json().get("response", "").strip()
+            print("done", flush=True)
+            return text, {}
+        except httpx.TimeoutException:
+            print("[TIMEOUT]", flush=True)
+            return "", {"timeout": True}
+        except Exception as e:
+            print(f"[ERROR: {e}]", flush=True)
+            return "", {"error": str(e)}
 
     def _simulate_mock_response(
         self, prompt: str, task_context: Optional[Dict[str, Any]]
@@ -318,9 +375,11 @@ def get_vlm_client(
         except Exception:
             pass
 
+    endpoint_model = None
     if model in models_cfg:
         cfg = models_cfg[model]
         provider = provider or cfg.get("provider", "mock")
+        endpoint_model = cfg.get("model", model)
         if not api_key and "env_key" in cfg:
             api_key = os.getenv(cfg["env_key"], "")
         if not base_url:
@@ -338,9 +397,15 @@ def get_vlm_client(
             provider = "gemini"
         elif "claude" in model:
             provider = "anthropic"
-        elif "ollama" in model or "llava" in model:
+        elif "ollama" in model or "llava" in model or "qwen" in model or "moondream" in model:
             provider = "ollama"
         else:
             provider = "mock"
 
-    return VLMClient(provider=provider, model=model, api_key=api_key, base_url=base_url)
+    return VLMClient(
+        provider=provider,
+        model=model,
+        endpoint_model=endpoint_model or model,
+        api_key=api_key,
+        base_url=base_url,
+    )

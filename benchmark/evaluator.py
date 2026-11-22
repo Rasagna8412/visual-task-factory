@@ -160,6 +160,7 @@ class BenchmarkEvaluator:
                 f"Please provide a concise and direct answer based strictly on the image."
             )
             open_ctx = {
+                "task_id": task["task_id"],
                 "format": "open_ended",
                 "correct_answer": open_qa.get("answer", ""),
                 "difficulty": difficulty,
@@ -196,6 +197,7 @@ class BenchmarkEvaluator:
                 f"Select the best option (A, B, C, or D) based strictly on the image."
             )
             mcq_ctx = {
+                "task_id": task["task_id"],
                 "format": "mcq",
                 "correct_answer": str(mcq_qa.get("answer", "")),
                 "correct_option": mcq_qa.get("correct_option", "A"),

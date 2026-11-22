@@ -590,25 +590,38 @@ class SceneBuilder:
             if d["type"] == "crosshair"
         ]
 
-        q_text = (
-            f"Is the {node_a_orig['color']} {node_a_orig['shape']} at "
-            f"({int(node_a_orig['center'][0])}, {int(node_a_orig['center'][1])}) "
-            f"partially occluded by the {node_b_orig['color']} {node_b_orig['shape']}?"
-        )
+        base_is_yes = rng.choice([True, False])
+        if base_is_yes:
+            q_text = (
+                f"Is the {node_a_orig['color']} {node_a_orig['shape']} at "
+                f"({int(node_a_orig['center'][0])}, {int(node_a_orig['center'][1])}) "
+                f"partially occluded by the {node_b_orig['color']} {node_b_orig['shape']}?"
+            )
+        else:
+            q_text = (
+                f"Is the {node_b_orig['color']} {node_b_orig['shape']} at "
+                f"({int(node_b_orig['center'][0])}, {int(node_b_orig['center'][1])}) "
+                f"partially occluded by the {node_a_orig['color']} {node_a_orig['shape']}?"
+            )
+
+        binary_opts = ["yes", "no", "cannot_determine", "partially"]
+        rng.shuffle(binary_opts)
 
         qa_base_target = self._create_binary_qa(
             rng,
             question_id="q_cf_target",
             question_text=q_text,
-            is_true=True,
+            is_true=base_is_yes,
             target_ids=[node_a_orig["id"], node_b_orig["id"]],
+            options_list=list(binary_opts),
         )
         qa_cf_target = self._create_binary_qa(
             rng,
             question_id="q_cf_target",
             question_text=q_text,
-            is_true=False,
+            is_true=(not base_is_yes),
             target_ids=[node_a_orig["id"], node_b_orig["id"]],
+            options_list=list(binary_opts),
         )
 
         base_scene["metadata"]["twin_type"] = "base"
@@ -651,11 +664,13 @@ class SceneBuilder:
         question_text: str,
         is_true: bool,
         target_ids: List[str],
+        options_list: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """Creates dual-format binary (yes/no) Q&A item."""
         correct_answer = "yes" if is_true else "no"
-        options_list = ["yes", "no", "cannot_determine", "partially"]
-        rng.shuffle(options_list)
+        if options_list is None:
+            options_list = ["yes", "no", "cannot_determine", "partially"]
+            rng.shuffle(options_list)
 
         options = {chr(65 + i): opt for i, opt in enumerate(options_list)}
         correct_option = next(k for k, v in options.items() if v == correct_answer)
@@ -828,16 +843,21 @@ class SceneBuilder:
 
         if answer_type == "count":
             cnt = int(answer)
-            distractor_pool = [cnt + 1, cnt + 2, cnt + 3, max(0, cnt - 1), max(0, cnt - 2), cnt + 4]
-            distractor_pool = sorted(list(set(d for d in distractor_pool if d != cnt)))
-            chosen_distractors = rng.sample(distractor_pool, 3)
+            # Tight, plausible distractors: ans ± 1, ans ± 2, ans ± 3 (all >= 0)
+            candidate_deltas = [-1, 1, -2, 2, -3, 3, -4, 4]
+            distractor_pool = []
+            for delta in candidate_deltas:
+                val = cnt + delta
+                if val >= 0 and val != cnt and val not in distractor_pool:
+                    distractor_pool.append(val)
+            chosen_distractors = rng.sample(distractor_pool[:5], 3)
             choices = [str(cnt)] + [str(d) for d in chosen_distractors]
         elif answer_type == "abstention":
-            distractor_pool = ["red circle", "blue square", "green triangle", "none"]
+            distractor_pool = ["red circle", "blue square", "green triangle", "yellow square", "purple circle"]
             chosen_distractors = rng.sample(distractor_pool, 3)
             choices = ["cannot_determine"] + chosen_distractors
         else:
-            choices = ["yes", "no", "cannot_determine", "unknown"]
+            choices = ["yes", "no", "cannot_determine", "partially"]
 
         rng.shuffle(choices)
         options = {chr(65 + i): c for i, c in enumerate(choices)}
