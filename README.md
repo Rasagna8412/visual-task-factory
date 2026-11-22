@@ -5,10 +5,13 @@
 [![Shapely Geometry](https://img.shields.io/badge/shapely-exact%20geometry-brightgreen.svg)](https://shapely.readthedocs.io/)
 [![Validation Gate](https://img.shields.io/badge/validation%20gate-76.3%25%20passed%20(29%2F38)-success.svg)](#3-live-benchmark-results-seed-42--348-vision-queries)
 [![Live Queries](https://img.shields.io/badge/live%20eval-348%20vision%20queries-blueviolet.svg)](#3-live-benchmark-results-seed-42--348-vision-queries)
+[![Submission Kit](https://img.shields.io/badge/submission%20kit-SUBMISSION.md-orange.svg)](SUBMISSION.md)
 
 A deterministic benchmark generation engine and evaluation suite designed to probe **2D Spatial Occlusion, Multi-Layer Depth Reasoning, and Counting** in Vision-Language Models (VLMs) on dense technical diagrams.
 
-Built for the **InnoData Visual Reasoning Benchmark Hackathon**.
+Built for the **InnoData Visual Reasoning Benchmark Hackathon** (Track 2: Visual Task Factory).
+
+> 📄 **Looking for the Grand Finale Pitch & Submission Form?** Review our complete [Innodata Hack2skill Submission Kit & 5-Minute Pitch Script](SUBMISSION.md).
 
 ---
 
@@ -63,6 +66,14 @@ Built for the **InnoData Visual Reasoning Benchmark Hackathon**.
 ---
 
 ## 2. Innodata Judging Criteria Alignment
+
+| Rubric Dimension | Weight | Benchmark Implementation & Evidence |
+| :--- | :---: | :--- |
+| **Implementation & Repeatability** | **25%** | 100% deterministic from integer seed. Single persistent headless Playwright Chromium instance renders batches in seconds. End-to-end execution via `python main.py` or `--eval-only`. |
+| **Validity & Validation Evidence** | **25%** | Automated Two-Stage Gate: Shapely geometric clipping/visibility filter + live text-only Ollama (`dolphin3:8b`) anti-shortcut filter + atomic pair dropping. **29 / 38 passed (76.3%)**. |
+| **Meaningful Variation** | **20%** | Multi-tiered difficulty matrix varying node count (10–52), occlusion ratios, and distractor gridlines across circles, squares, and triangles with bidirectional depth graphs. |
+| **Original Approach & Engineering Judgment** | **15%** | Counterfactual Twin Pairs (>95% pixel-identical with single z-order swap) measuring **Pairwise Consistency**, plus **Abstention Mode** on 100% occluded hidden nodes. |
+| **Practical Impact & Communication** | **15%** | 348 live vision queries evaluated, publication-grade 300 DPI Matplotlib charts, self-contained 3D glassmorphic Demo Day dashboard (`dashboard.html`), and machine-readable JSON exports. |
 
 ### I. Technical Depth & Ground Truth Precision
 - **Exact Vector Geometry:** Never relies on diffusion models or approximate pixel heuristics. Every scene is constructed programmatically with vanilla SVG/HTML5 and computed via **Shapely exact 2D polygon math**.
@@ -220,6 +231,7 @@ Then execute `main.py` targeting your desired models from `config/models.json`:
 visual-task-factory/
 ├── AGENTS.md                   # Operational rules & benchmark guidelines
 ├── README.md                   # Complete documentation & judge guide
+├── SUBMISSION.md               # Hack2skill submission kit & Demo Day pitch guide
 ├── requirements.txt            # Python dependencies
 ├── .env.example                # API credentials template
 ├── .gitignore                  # Submission gitignore (tracks final_live_run, ignores temp caches)
