@@ -11,7 +11,14 @@ A deterministic benchmark generation engine and evaluation suite designed to pro
 
 Built for the **InnoData Visual Reasoning Benchmark Hackathon** (Track 2: Visual Task Factory).
 
-> 📄 **Looking for the Grand Finale Pitch & Submission Form?** Review our complete [Innodata Hack2skill Submission Kit & 5-Minute Pitch Script](SUBMISSION.md).
+> 📄 **Looking for the Grand Finale Pitch & Submission Form?** Review our complete [Innodata Hack2skill Submission Kit & 5-Minute Pitch Script](SUBMISSION.md).  
+> 🌐 **Live Interactive 3D Demo Dashboard:** **[https://rasagna8412.github.io/visual-task-factory/](https://rasagna8412.github.io/visual-task-factory/)** *(No installation required — click to interact with the 3D glassmorphic dashboard, leaderboard, and visual inspector!)*
+
+<p align="center">
+  <a href="https://rasagna8412.github.io/visual-task-factory/">
+    <img src="assets/dashboard_preview.png" alt="Visual Task Factory 3D Glassmorphic Dashboard Preview" width="100%" style="border-radius: 14px; box-shadow: 0 12px 35px rgba(0,0,0,0.6);" />
+  </a>
+</p>
 
 ---
 

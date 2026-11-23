@@ -4,7 +4,8 @@
 **Team:** Rasagna & Team  
 **Track:** Track 2 — Visual Task Factory  
 **Repository:** [https://github.com/Rasagna8412/visual-task-factory](https://github.com/Rasagna8412/visual-task-factory)  
-**Live Demo Dashboard:** [`output/final_live_run/dashboard.html`](output/final_live_run/dashboard.html)  
+**Live Interactive 3D Dashboard (GitHub Pages):** [https://rasagna8412.github.io/visual-task-factory/](https://rasagna8412.github.io/visual-task-factory/)  
+**Local Dashboard File:** [`index.html`](index.html) or [`output/final_live_run/dashboard.html`](output/final_live_run/dashboard.html)  
 
 ---
 

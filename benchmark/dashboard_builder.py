@@ -1,17 +1,8 @@
-"""Dashboard Builder module for Visual Task Factory (Milestone 4).
+"""Dashboard Builder module for Visual Task Factory.
 
-Generates an ultra-modern, publication-ready Demo Day HTML dashboard (`dashboard.html`)
-with glassy/glossy UI (glassmorphism), realistic 3D lighting, interactive card tilt,
-and specular highlights.
-
-Features:
-  - Cosmic ambient glow mesh with animated floating gradient orbs
-  - Frosted glassmorphic cards with dynamic 3D mouse tilt & specular glare
-  - Executive 3D headline metric cards with mini progress bars
-  - Interactive Glass Leaderboard table with ranking badges
-  - 300 DPI Publication Charts Showcase with interactive full-screen Lightbox
-  - 3D Visual Counterfactual Inspector comparing base/counterfactual image twins
-  - Abstention & Hallucination Inspector proving Shapely 100% occlusion
+Generates an ultra-premium, 3D Glassmorphic / Glossy UI Demo Day dashboard (`dashboard.html`)
+with realistic specular highlights, translucent frosted glass, dynamic neon rim lighting,
+and interactive 3D card physics.
 """
 
 from __future__ import annotations
@@ -34,7 +25,7 @@ def _b64_img(img_path: Path) -> str:
 
 
 class DashboardBuilder:
-    """Builds self-contained HTML Demo Day dashboard with 3D glassmorphic styling."""
+    """Builds self-contained HTML Demo Day dashboard with high-gloss 3D glassmorphism."""
 
     def __init__(self, run_dir: Union[str, Path]) -> None:
         self.run_dir = Path(run_dir)
@@ -83,7 +74,6 @@ class DashboardBuilder:
         """Finds base/counterfactual pairs in the run directory."""
         pairs: Dict[str, Dict[str, Any]] = {}
 
-        # Scan for ground_truth.json files
         for gt_p in sorted(list(self.run_dir.rglob("ground_truth.json"))):
             folder = gt_p.parent
             png_p = folder / "scene.png"
@@ -106,7 +96,6 @@ class DashboardBuilder:
                 if pair_key not in pairs:
                     pairs[pair_key] = {"pair_id": pair_key, "difficulty": meta.get("difficulty", "medium")}
 
-                # Find target QA
                 target_qa = next((q for q in data.get("qa_pairs", []) if q.get("is_counterfactual_target")), None)
                 q_text = target_qa["open_ended"]["question"] if target_qa else "Is shape A occluded by shape B?"
                 ans = target_qa["open_ended"]["answer"] if target_qa else ("yes" if twin_type == "base" else "no")
@@ -119,7 +108,6 @@ class DashboardBuilder:
                     "edit": meta.get("surgical_edit", "swapped z-order of 2 shapes"),
                 }
 
-        # Format into list of paired dicts (display up to 4 pairs)
         cf_list = []
         for p_id, p_info in sorted(pairs.items()):
             if "base" in p_info and "counterfactual" in p_info:
@@ -176,10 +164,9 @@ class DashboardBuilder:
         cf_pairs: List[Dict[str, Any]],
         abstention: Optional[Dict[str, Any]],
     ) -> str:
-        """Renders the comprehensive 3D glassmorphic HTML5 template."""
+        """Renders the comprehensive 3D high-gloss glassmorphic HTML5 template."""
         now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # Sort models by Open-Ended Accuracy descending
         sorted_models = sorted(
             summary_metrics.items(),
             key=lambda item: item[1].get("open_ended_accuracy", 0.0),
@@ -201,7 +188,6 @@ class DashboardBuilder:
         baseline_cons = baseline_m.get("pairwise_consistency", 0.0)
         baseline_abs = baseline_m.get("abstention_accuracy", 0.0)
 
-        # Leaderboard rows with rankings & 3D styling
         leaderboard_rows = []
         rank_badges = ["🥇 1st", "🥈 2nd", "🥉 3rd", "4th", "5th"]
         for idx, (m, d) in enumerate(sorted_models):
@@ -210,26 +196,25 @@ class DashboardBuilder:
             gap_sign = "+" if gap_val >= 0 else ""
             total_q = d.get("total_queries_evaluated", 174)
             leaderboard_rows.append(f"""
-            <tr class="table-row-3d">
+            <tr class="table-row-glass">
               <td>
                 <div class="model-cell">
-                  <span class="rank-pill">{rank_str}</span>
+                  <span class="glass-rank-pill">{rank_str}</span>
                   <div>
                     <strong class="model-title">{m}</strong>
-                    <div class="model-meta">{total_q} queries evaluated</div>
+                    <div class="model-meta">{total_q} live queries</div>
                   </div>
                 </div>
               </td>
-              <td><span class="metric-num num-cyan">{d.get('open_ended_accuracy', 0)}%</span></td>
-              <td><span class="metric-num num-blue">{d.get('mcq_accuracy', 0)}%</span></td>
-              <td><span class="glass-badge badge-warning">{gap_sign}{gap_val}%</span></td>
-              <td><span class="metric-num num-emerald">{d.get('pairwise_consistency', 0)}%</span></td>
-              <td><span class="metric-num num-purple">{d.get('abstention_accuracy', 0)}%</span></td>
-              <td><span class="glass-badge badge-danger">{d.get('hallucination_rate', 0)}%</span></td>
+              <td><span class="stat-num stat-cyan">{d.get('open_ended_accuracy', 0)}%</span></td>
+              <td><span class="stat-num stat-blue">{d.get('mcq_accuracy', 0)}%</span></td>
+              <td><span class="gloss-badge badge-warning">{gap_sign}{gap_val}%</span></td>
+              <td><span class="stat-num stat-emerald">{d.get('pairwise_consistency', 0)}%</span></td>
+              <td><span class="stat-num stat-purple">{d.get('abstention_accuracy', 0)}%</span></td>
+              <td><span class="gloss-badge badge-danger">{d.get('hallucination_rate', 0)}%</span></td>
             </tr>
             """)
 
-        # Counterfactual Inspector cards
         cf_cards = []
         for p in cf_pairs:
             diff_color = {
@@ -239,52 +224,56 @@ class DashboardBuilder:
             }.get(p["difficulty"].lower(), "badge-blue")
 
             cf_cards.append(f"""
-            <div class="card-3d glass-panel cf-card">
-              <div class="card-glare"></div>
-              <div class="cf-card-header">
-                <div class="tags-row">
-                  <span class="glass-badge badge-cyan">{p['pair_id'].upper()}</span>
-                  <span class="glass-badge {diff_color}">{p['difficulty'].upper()}</span>
+            <div class="glass-card-3d cf-showcase-panel">
+              <div class="glass-sheen"></div>
+              <div class="cf-header-bar">
+                <div class="tags-cluster">
+                  <span class="gloss-badge badge-cyan">{p['pair_id'].upper()}</span>
+                  <span class="gloss-badge {diff_color}">{p['difficulty'].upper()}</span>
                 </div>
-                <div class="cf-edit-tag">⚡ Surgical Edit: {p['edit']}</div>
+                <div class="cf-edit-pill">⚡ Surgical Edit: {p['edit']}</div>
               </div>
-              <div class="cf-prompt">
-                <span class="prompt-icon">🔍</span>
-                <div>
-                  <strong>Benchmark Query:</strong> "{p['question']}"
+              <div class="cf-query-box">
+                <span class="query-bulb">🔍</span>
+                <div class="query-text">
+                  <strong>Query:</strong> "{p['question']}"
                 </div>
               </div>
-              <div class="cf-comparison-3d">
-                <div class="twin-box-3d" onclick="openLightbox('{p['base_b64']}', 'Base Twin ({p['pair_id']}) - Ground Truth: {p['base_answer'].upper()}')">
-                  <div class="twin-badge-bar">
-                    <span class="twin-tag">BASE TWIN (z-order A)</span>
-                    <span class="inspect-btn">⛶ Inspect</span>
+              <div class="cf-stage-3d">
+                <div class="twin-glass-pedestal" onclick="openLightbox('{p['base_b64']}', 'Base Twin ({p['pair_id']}) — Ground Truth: {p['base_answer'].upper()}')">
+                  <div class="pedestal-top">
+                    <span class="twin-title">BASE TWIN (z-order A)</span>
+                    <span class="pedestal-zoom">⛶ Inspect</span>
                   </div>
-                  <div class="img-wrapper-3d">
-                    <img src="{p['base_b64']}" class="diagram-img-3d" alt="Base Scene" />
+                  <div class="pedestal-img-frame">
+                    <img src="{p['base_b64']}" class="pedestal-img" alt="Base Scene" />
                   </div>
-                  <div class="twin-answer-bar">
-                    <span>Ground Truth:</span>
-                    <span class="glass-badge badge-emerald-glow">{p['base_answer'].upper()}</span>
+                  <div class="pedestal-bottom">
+                    <span class="ans-label">Ground Truth:</span>
+                    <span class="gloss-badge badge-emerald-glow">{p['base_answer'].upper()}</span>
                   </div>
                 </div>
 
-                <div class="flip-indicator-orbit">
-                  <div class="orbit-glow"></div>
-                  <div class="flip-icon-badge" title="Z-Order Swapped: Answer Inverts">⇄<br><span>FLIP</span></div>
+                <div class="orbital-flip-portal">
+                  <div class="portal-ring ring-outer"></div>
+                  <div class="portal-ring ring-inner"></div>
+                  <div class="portal-core" title="Z-Order Inversion: Ground Truth Flips">
+                    <span class="flip-arrows">⇄</span>
+                    <span class="flip-sub">FLIP</span>
+                  </div>
                 </div>
 
-                <div class="twin-box-3d" onclick="openLightbox('{p['cf_b64']}', 'Counterfactual Twin ({p['pair_id']}) - Ground Truth: {p['cf_answer'].upper()}')">
-                  <div class="twin-badge-bar">
-                    <span class="twin-tag">COUNTERFACTUAL TWIN (z-order B)</span>
-                    <span class="inspect-btn">⛶ Inspect</span>
+                <div class="twin-glass-pedestal" onclick="openLightbox('{p['cf_b64']}', 'Counterfactual Twin ({p['pair_id']}) — Ground Truth: {p['cf_answer'].upper()}')">
+                  <div class="pedestal-top">
+                    <span class="twin-title">COUNTERFACTUAL TWIN (z-order B)</span>
+                    <span class="pedestal-zoom">⛶ Inspect</span>
                   </div>
-                  <div class="img-wrapper-3d">
-                    <img src="{p['cf_b64']}" class="diagram-img-3d" alt="Counterfactual Scene" />
+                  <div class="pedestal-img-frame">
+                    <img src="{p['cf_b64']}" class="pedestal-img" alt="Counterfactual Scene" />
                   </div>
-                  <div class="twin-answer-bar">
-                    <span>Ground Truth:</span>
-                    <span class="glass-badge badge-rose-glow">{p['cf_answer'].upper()} (FLIPPED)</span>
+                  <div class="pedestal-bottom">
+                    <span class="ans-label">Ground Truth:</span>
+                    <span class="gloss-badge badge-rose-glow">{p['cf_answer'].upper()} (FLIPPED)</span>
                   </div>
                 </div>
               </div>
@@ -294,43 +283,44 @@ class DashboardBuilder:
         abstention_html = ""
         if abstention:
             abstention_html = f"""
-            <div class="card-3d glass-panel cf-card">
-              <div class="card-glare"></div>
-              <div class="cf-card-header">
-                <div class="tags-row">
-                  <span class="glass-badge badge-purple">ABSTENTION MODE</span>
-                  <span class="glass-badge badge-rose">100% OCCLUDED</span>
+            <div class="glass-card-3d cf-showcase-panel">
+              <div class="glass-sheen"></div>
+              <div class="cf-header-bar">
+                <div class="tags-cluster">
+                  <span class="gloss-badge badge-purple">ABSTENTION MODE</span>
+                  <span class="gloss-badge badge-rose">100% OCCLUDED</span>
                 </div>
-                <div class="cf-edit-tag">📐 Shapely Planar Area == 0.0 px²</div>
+                <div class="cf-edit-pill">📐 Shapely Planar Visible Area == 0.0000 px²</div>
               </div>
-              <div class="cf-prompt">
-                <span class="prompt-icon">👁️</span>
-                <div>
+              <div class="cf-query-box">
+                <span class="query-bulb">👁️</span>
+                <div class="query-text">
                   <strong>Target Query:</strong> "{abstention['question']}"
                 </div>
               </div>
-              <div class="abstention-grid-3d">
-                <div class="twin-box-3d" onclick="openLightbox('{abstention['png_b64']}', 'Abstention Case - Hidden Target 100% Occluded')">
-                  <div class="twin-badge-bar">
-                    <span class="twin-tag">RENDERED DIAGRAM</span>
-                    <span class="inspect-btn">⛶ Inspect</span>
+              <div class="abstention-stage-3d">
+                <div class="twin-glass-pedestal" onclick="openLightbox('{abstention['png_b64']}', 'Abstention Case: Hidden Target 100% Occluded')">
+                  <div class="pedestal-top">
+                    <span class="twin-title">RENDERED DIAGRAM</span>
+                    <span class="pedestal-zoom">⛶ Inspect</span>
                   </div>
-                  <div class="img-wrapper-3d">
-                    <img src="{abstention['png_b64']}" class="diagram-img-3d" alt="Abstention Scene" />
+                  <div class="pedestal-img-frame">
+                    <img src="{abstention['png_b64']}" class="pedestal-img" alt="Abstention Scene" />
                   </div>
-                  <div class="twin-answer-bar">
-                    <span>Expected Response:</span>
-                    <span class="glass-badge badge-purple-glow">{abstention['answer']}</span>
+                  <div class="pedestal-bottom">
+                    <span class="ans-label">Expected Response:</span>
+                    <span class="gloss-badge badge-purple-glow">{abstention['answer']}</span>
                   </div>
                 </div>
-                <div class="abstention-proof-box">
-                  <h4 class="proof-title">✨ Ground Truth Vector Proof</h4>
-                  <ul class="proof-list">
-                    <li><span class="bullet">🔹</span> <strong>Hidden Target:</strong> <code class="code-hl">{abstention['hidden_shape']}</code> (Layer z=0)</li>
-                    <li><span class="bullet">🔹</span> <strong>Covering Node:</strong> <code class="code-hl">{abstention['cover_shape']}</code> (Layer z=1, 160% scale)</li>
-                    <li><span class="bullet">🔹</span> <strong>Centroid Alignment:</strong> Exact planar coincidence</li>
-                    <li><span class="bullet">🔹</span> <strong>Shapely Visible Ratio:</strong> <code>0.000000</code></li>
-                    <li><span class="bullet">⚠️</span> <strong>The Hallucination Trap:</strong> Models relying on language priors or guessing invent shape attributes instead of recognizing visual absence.</li>
+
+                <div class="abstention-proof-card">
+                  <h4 class="proof-head">✨ Mathematical Geometric Proof</h4>
+                  <ul class="proof-items">
+                    <li><span class="bullet">🔹</span> <strong>Hidden Target:</strong> <code class="hl-code">{abstention['hidden_shape']}</code> (Base Layer z=0)</li>
+                    <li><span class="bullet">🔹</span> <strong>Covering Node:</strong> <code class="hl-code">{abstention['cover_shape']}</code> (Foreground Layer z=1, 160% size)</li>
+                    <li><span class="bullet">🔹</span> <strong>Shapely Intersection:</strong> 100% planar coincidence</li>
+                    <li><span class="bullet">🔹</span> <strong>Visible Pixel Ratio:</strong> <code>0.000000</code></li>
+                    <li><span class="bullet">⚠️</span> <strong>The Hallucination Trap:</strong> Weaker models hallucinate colors and shape contours when visual evidence is completely absent.</li>
                   </ul>
                 </div>
               </div>
@@ -342,30 +332,33 @@ class DashboardBuilder:
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visual Task Factory — 3D Glassmorphic Benchmark Dashboard</title>
+  <title>Visual Task Factory — 3D Glassmorphic Benchmark Suite</title>
   <style>
     /* =========================================================================
-       CSS VARIABLES & THEME DEFINITION
+       ULTRA-GLOSS 3D GLASSMORPHISM THEME
        ========================================================================= */
     :root {{
-      --bg-dark: #030712;
-      --card-bg: rgba(15, 23, 42, 0.72);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --card-border-highlight: rgba(255, 255, 255, 0.35);
-      --text-main: #f8fafc;
+      --cyan: #00f2fe;
+      --cyan-glow: rgba(0, 242, 254, 0.45);
+      --blue: #4facfe;
+      --purple: #b927ff;
+      --purple-glow: rgba(185, 39, 255, 0.45);
+      --emerald: #00f2a9;
+      --emerald-glow: rgba(0, 242, 169, 0.45);
+      --amber: #ffb300;
+      --amber-glow: rgba(255, 179, 0, 0.45);
+      --rose: #ff3366;
+      --rose-glow: rgba(255, 51, 102, 0.45);
+
+      --glass-surface: rgba(255, 255, 255, 0.06);
+      --glass-surface-hover: rgba(255, 255, 255, 0.12);
+      --glass-border: rgba(255, 255, 255, 0.22);
+      --glass-border-light: rgba(255, 255, 255, 0.45);
+      --glass-blur: blur(28px) saturate(210%);
+
+      --text-hero: #ffffff;
+      --text-body: #e2e8f0;
       --text-muted: #94a3b8;
-      --text-subtle: #64748b;
-
-      --cyan-neon: #38bdf8;
-      --blue-neon: #60a5fa;
-      --purple-neon: #a855f7;
-      --emerald-neon: #34d399;
-      --amber-neon: #fbbf24;
-      --rose-neon: #f87171;
-
-      --glass-gloss: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.02) 100%);
-      --shadow-3d: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-      --shadow-3d-hover: 0 30px 70px -12px rgba(56, 189, 248, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
     }}
 
     * {{
@@ -376,361 +369,402 @@ class DashboardBuilder:
     }}
 
     body {{
-      background-color: var(--bg-dark);
+      background-color: #030712;
       background-image:
-        radial-gradient(circle at 15% 15%, rgba(30, 27, 75, 0.7) 0%, transparent 45%),
-        radial-gradient(circle at 85% 25%, rgba(14, 116, 144, 0.4) 0%, transparent 40%),
-        radial-gradient(circle at 50% 85%, rgba(88, 28, 135, 0.4) 0%, transparent 50%),
-        linear-gradient(to bottom, #020617 0%, #030712 100%);
-      color: var(--text-main);
-      padding: 40px 24px 60px;
+        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(244, 63, 94, 0.25) 0%, transparent 45%),
+        radial-gradient(circle at 20% 90%, rgba(16, 185, 129, 0.25) 0%, transparent 45%),
+        linear-gradient(180deg, #020617 0%, #030712 100%);
+      color: var(--text-body);
+      padding: 40px 24px 80px;
       line-height: 1.5;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }}
 
-    /* Isometric Subtle Grid Background */
+    /* Futuristic Luminous Grid Overlay */
     body::before {{
       content: "";
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 48px 48px;
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 40px 40px;
       pointer-events: none;
       z-index: 1;
     }}
 
-    /* Animated Ambient Glow Orbs */
-    .ambient-glow {{
+    /* Animated Dynamic Floating Aurora Orbs */
+    .aurora-orb {{
       position: fixed;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(120px);
       pointer-events: none;
       z-index: 0;
-      opacity: 0.55;
-      animation: floatOrbit 20s ease-in-out infinite alternate;
+      opacity: 0.65;
+      animation: auroraFloat 22s ease-in-out infinite alternate;
     }}
-    .glow-cyan {{
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+    .aurora-1 {{
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, #00f2fe 0%, rgba(0, 242, 254, 0) 70%);
       top: -150px;
       left: -150px;
     }}
-    .glow-purple {{
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, transparent 70%);
-      top: 35%;
-      right: -200px;
-      animation-duration: 25s;
+    .aurora-2 {{
+      width: 750px;
+      height: 750px;
+      background: radial-gradient(circle, #b927ff 0%, rgba(185, 39, 255, 0) 70%);
+      top: 30%;
+      right: -250px;
+      animation-duration: 26s;
     }}
-    .glow-indigo {{
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
-      bottom: -100px;
-      left: 20%;
-      animation-duration: 18s;
-    }}
-
-    @keyframes floatOrbit {{
-      0% {{ transform: translate3d(0, 0, 0) scale(1); }}
-      50% {{ transform: translate3d(50px, -40px, 0) scale(1.08); }}
-      100% {{ transform: translate3d(-40px, 50px, 0) scale(0.95); }}
+    .aurora-3 {{
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #00f2a9 0%, rgba(0, 242, 169, 0) 70%);
+      bottom: -150px;
+      left: 25%;
+      animation-duration: 20s;
     }}
 
-    .container {{
-      max-width: 1280px;
+    @keyframes auroraFloat {{
+      0% {{ transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }}
+      50% {{ transform: translate3d(60px, -50px, 0) rotate(90deg) scale(1.1); }}
+      100% {{ transform: translate3d(-50px, 60px, 0) rotate(180deg) scale(0.95); }}
+    }}
+
+    .app-viewport {{
+      max-width: 1300px;
       margin: 0 auto;
       position: relative;
       z-index: 2;
     }}
 
     /* =========================================================================
-       GLASSMORPHISM & 3D CARD CORE
+       3D GLASSMORPHIC CARDS & SPECULAR SHEEN
        ========================================================================= */
-    .glass-panel {{
-      background: var(--card-bg);
-      backdrop-filter: blur(24px) saturate(190%);
-      -webkit-backdrop-filter: blur(24px) saturate(190%);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      box-shadow: var(--shadow-3d);
+    .glass-card-3d {{
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow:
+        0 20px 50px -10px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+        0 2px 0 0 rgba(255, 255, 255, 0.4) inset;
       position: relative;
       overflow: hidden;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-    }}
-
-    /* Specular Gloss Overlay */
-    .glass-panel::before {{
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      z-index: 3;
-    }}
-
-    /* 3D Interactive Tilt Card */
-    .card-3d {{
       transform-style: preserve-3d;
-      perspective: 1200px;
-    }}
-    .card-3d:hover {{
-      border-color: rgba(56, 189, 248, 0.4);
-      box-shadow: var(--shadow-3d-hover);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
     }}
 
-    /* Dynamic Glare Effect */
-    .card-glare {{
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.12), transparent 80%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 2;
-      border-radius: inherit;
+    .glass-card-3d:hover {{
+      border-color: var(--glass-border-light);
+      box-shadow:
+        0 30px 70px -10px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(0, 242, 254, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.25) inset,
+        0 2px 0 0 rgba(255, 255, 255, 0.6) inset;
     }}
-    .card-3d:hover .card-glare {{
+
+    /* Glossy Diagonal Specular Light Reflection */
+    .glass-sheen {{
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 25%,
+        transparent 50%
+      );
+      pointer-events: none;
+      transform: rotate(15deg);
+      transition: opacity 0.3s ease;
+      opacity: 0.7;
+    }}
+    .glass-card-3d:hover .glass-sheen {{
       opacity: 1;
     }}
 
     /* =========================================================================
-       HEADER SECTION
+       HERO HEADER PANEL
        ========================================================================= */
-    .header-panel {{
-      padding: 32px 36px;
-      margin-bottom: 36px;
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.7) 100%);
+    .header-hero {{
+      padding: 36px 40px;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }}
-    .header-top {{
+    .hero-top-row {{
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 18px;
+      gap: 24px;
+      margin-bottom: 20px;
     }}
-    .brand-group {{
+    .hero-brand {{
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
     }}
-    .cube-logo-3d {{
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #d946ef 100%);
-      border-radius: 14px;
+    .hero-logo-prism {{
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #b927ff 100%);
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.4);
-      transform: perspective(600px) rotateX(10deg) rotateY(-10deg);
+      font-size: 30px;
+      box-shadow:
+        0 15px 35px rgba(0, 242, 254, 0.4),
+        inset 0 2px 2px rgba(255, 255, 255, 0.7);
+      transform: perspective(600px) rotateX(12deg) rotateY(-12deg);
       transition: transform 0.4s ease;
     }}
-    .cube-logo-3d:hover {{
-      transform: perspective(600px) rotateX(0deg) rotateY(0deg) scale(1.08);
+    .hero-logo-prism:hover {{
+      transform: perspective(600px) rotateX(0deg) rotateY(0deg) scale(1.1);
     }}
-    .title-area h1 {{
-      font-size: 30px;
-      font-weight: 800;
-      letter-spacing: -0.8px;
-      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 50%, #c084fc 100%);
+    .hero-titles h1 {{
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #ffffff 0%, #00f2fe 50%, #e0aaff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(0, 242, 254, 0.3));
       margin-bottom: 4px;
     }}
-    .title-area .subtitle {{
-      font-size: 14px;
+    .hero-titles .hero-tagline {{
+      font-size: 15px;
       color: var(--text-muted);
       font-weight: 500;
     }}
 
-    .status-badge-gate {{
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(52, 211, 153, 0.4);
-      color: #34d399;
-      padding: 8px 16px;
+    .validation-shield {{
+      background: rgba(0, 242, 169, 0.15);
+      border: 1px solid rgba(0, 242, 169, 0.5);
+      color: #00f2a9;
+      padding: 10px 20px;
       border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow:
+        0 0 30px rgba(0, 242, 169, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+    }}
+    .pulse-laser {{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00f2a9;
+      box-shadow: 0 0 12px #00f2a9;
+      animation: laserPulse 1.6s infinite;
+    }}
+    @keyframes laserPulse {{
+      0%, 100% {{ transform: scale(1); opacity: 1; }}
+      50% {{ transform: scale(0.7); opacity: 0.4; }}
+    }}
+
+    .spec-pills-cluster {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }}
+    .spec-pill {{
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      padding: 6px 16px;
       font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-weight: 600;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
-    }}
-    .pulse-dot {{
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #34d399;
-      box-shadow: 0 0 8px #34d399;
-      animation: pulseGlow 1.8s infinite;
-    }}
-    @keyframes pulseGlow {{
-      0%, 100% {{ opacity: 1; transform: scale(1); }}
-      50% {{ opacity: 0.4; transform: scale(0.85); }}
-    }}
-
-    .pill-tags-row {{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }}
-    .glass-pill {{
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 9999px;
-      padding: 5px 12px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #cbd5e1;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s ease, border-color 0.2s ease;
-    }}
-    .glass-pill:hover {{
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }}
 
     /* =========================================================================
-       SECTION HEADERS
+       SECTION TITLES
        ========================================================================= */
-    .section-title-wrap {{
+    .section-banner {{
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      margin-top: 10px;
+      gap: 14px;
+      margin-bottom: 24px;
+      margin-top: 12px;
     }}
-    .section-badge-icon {{
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+    .section-icon-3d {{
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.25) 0%, rgba(185, 39, 255, 0.25) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      color: var(--cyan-neon);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+      font-size: 18px;
+      box-shadow: 0 8px 20px rgba(0, 242, 254, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }}
-    .section-title {{
-      font-size: 20px;
-      font-weight: 700;
-      color: #f1f5f9;
-      letter-spacing: -0.3px;
+    .section-banner-title {{
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.4px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }}
 
     /* =========================================================================
-       1. HEADLINE METRICS GRID (3D HOLOGRAPHIC TILES)
+       1. EXECUTIVE 3D METRICS GRID
        ========================================================================= */
-    .metrics-grid-3d {{
+    .metrics-stage-3d {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
     }}
-    .metric-card-3d {{
-      padding: 24px;
+    .metric-slab {{
+      padding: 28px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 180px;
+      min-height: 200px;
     }}
-    .metric-top-bar {{
+    .metric-slab-head {{
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }}
-    .metric-card-label {{
-      font-size: 12px;
-      font-weight: 700;
+    .metric-slab-title {{
+      font-size: 13px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       color: var(--text-muted);
     }}
-    .metric-glow-orb {{
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+    .metric-slab-badge {{
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      font-size: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }}
 
-    .metric-val-hero {{
-      font-size: 40px;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1px;
-      margin-bottom: 6px;
-      transform: translateZ(20px);
+    .metric-slab-val {{
+      font-size: 46px;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      margin-bottom: 8px;
+      transform: translateZ(30px);
     }}
-    .metric-sub-bar {{
+    .metric-slab-foot {{
       font-size: 13px;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }}
-    .progress-track {{
+    .glass-meter-track {{
       width: 100%;
-      height: 6px;
+      height: 8px;
       background: rgba(255, 255, 255, 0.08);
       border-radius: 9999px;
       overflow: hidden;
-      margin-top: 10px;
+      margin-top: 12px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
     }}
-    .progress-fill {{
+    .glass-meter-fill {{
       height: 100%;
       border-radius: 9999px;
-      transition: width 1s ease-out;
+      box-shadow: 0 0 15px currentColor;
     }}
 
     /* Card Glow Themes */
-    .card-cyan .metric-glow-orb {{ background: rgba(56, 189, 248, 0.2); color: var(--cyan-neon); }}
-    .card-cyan .metric-val-hero {{ color: var(--cyan-neon); text-shadow: 0 0 25px rgba(56, 189, 248, 0.4); }}
-    .card-cyan .progress-fill {{ background: linear-gradient(90deg, #0284c7, #38bdf8); }}
+    .slab-cyan {{
+      border-color: rgba(0, 242, 254, 0.35);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.2);
+    }}
+    .slab-cyan .metric-slab-badge {{ background: rgba(0, 242, 254, 0.2); color: var(--cyan); }}
+    .slab-cyan .metric-slab-val {{
+      background: linear-gradient(180deg, #ffffff 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 15px var(--cyan-glow));
+    }}
+    .slab-cyan .glass-meter-fill {{ background: linear-gradient(90deg, #0284c7, #00f2fe); color: #00f2fe; }}
 
-    .card-amber .metric-glow-orb {{ background: rgba(251, 191, 36, 0.2); color: var(--amber-neon); }}
-    .card-amber .metric-val-hero {{ color: var(--amber-neon); text-shadow: 0 0 25px rgba(251, 191, 36, 0.4); }}
-    .card-amber .progress-fill {{ background: linear-gradient(90deg, #d97706, #fbbf24); }}
+    .slab-amber {{
+      border-color: rgba(255, 179, 0, 0.35);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 179, 0, 0.2);
+    }}
+    .slab-amber .metric-slab-badge {{ background: rgba(255, 179, 0, 0.2); color: var(--amber); }}
+    .slab-amber .metric-slab-val {{
+      background: linear-gradient(180deg, #ffffff 0%, #ffb300 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 15px var(--amber-glow));
+    }}
+    .slab-amber .glass-meter-fill {{ background: linear-gradient(90deg, #d97706, #ffb300); color: #ffb300; }}
 
-    .card-emerald .metric-glow-orb {{ background: rgba(52, 211, 153, 0.2); color: var(--emerald-neon); }}
-    .card-emerald .metric-val-hero {{ color: var(--emerald-neon); text-shadow: 0 0 25px rgba(52, 211, 153, 0.4); }}
-    .card-emerald .progress-fill {{ background: linear-gradient(90deg, #059669, #34d399); }}
+    .slab-emerald {{
+      border-color: rgba(0, 242, 169, 0.35);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 169, 0.2);
+    }}
+    .slab-emerald .metric-slab-badge {{ background: rgba(0, 242, 169, 0.2); color: var(--emerald); }}
+    .slab-emerald .metric-slab-val {{
+      background: linear-gradient(180deg, #ffffff 0%, #00f2a9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 15px var(--emerald-glow));
+    }}
+    .slab-emerald .glass-meter-fill {{ background: linear-gradient(90deg, #059669, #00f2a9); color: #00f2a9; }}
 
-    .card-purple .metric-glow-orb {{ background: rgba(168, 85, 247, 0.2); color: var(--purple-neon); }}
-    .card-purple .metric-val-hero {{ color: var(--purple-neon); text-shadow: 0 0 25px rgba(168, 85, 247, 0.4); }}
-    .card-purple .progress-fill {{ background: linear-gradient(90deg, #7c3aed, #a855f7); }}
+    .slab-purple {{
+      border-color: rgba(185, 39, 255, 0.35);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(185, 39, 255, 0.2);
+    }}
+    .slab-purple .metric-slab-badge {{ background: rgba(185, 39, 255, 0.2); color: var(--purple); }}
+    .slab-purple .metric-slab-val {{
+      background: linear-gradient(180deg, #ffffff 0%, #b927ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 15px var(--purple-glow));
+    }}
+    .slab-purple .glass-meter-fill {{ background: linear-gradient(90deg, #7c3aed, #b927ff); color: #b927ff; }}
 
     /* =========================================================================
-       2. MODEL LEADERBOARD TABLE (FROSTED GLASS)
+       2. LEADERBOARD TABLE (LUMINOUS FROSTED GLASS)
        ========================================================================= */
-    .table-container-3d {{
-      padding: 4px;
-      margin-bottom: 44px;
+    .leaderboard-slab {{
+      padding: 6px;
+      margin-bottom: 52px;
     }}
     table {{
       width: 100%;
@@ -739,377 +773,418 @@ class DashboardBuilder:
       font-size: 14px;
     }}
     thead th {{
-      background: rgba(15, 23, 42, 0.85);
-      padding: 16px 20px;
-      font-weight: 700;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 18px 22px;
+      font-weight: 800;
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
       color: var(--text-muted);
-      border-bottom: 1px solid var(--card-border);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }}
     tbody tr {{
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       transition: background 0.2s ease, transform 0.2s ease;
     }}
     tbody tr:hover {{
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.07);
     }}
     tbody tr:last-child {{
       border-bottom: none;
     }}
     td {{
-      padding: 18px 20px;
+      padding: 20px 22px;
       vertical-align: middle;
     }}
     .model-cell {{
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }}
-    .rank-pill {{
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
+    .glass-rank-pill {{
+      font-size: 12px;
+      font-weight: 800;
+      padding: 5px 12px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #f8fafc;
-      white-space: nowrap;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }}
     .model-title {{
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
       color: #ffffff;
     }}
     .model-meta {{
-      font-size: 11px;
+      font-size: 12px;
       color: var(--text-muted);
     }}
-    .metric-num {{
-      font-weight: 800;
-      font-size: 15px;
+    .stat-num {{
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: -0.5px;
     }}
-    .num-cyan {{ color: var(--cyan-neon); }}
-    .num-blue {{ color: var(--blue-neon); }}
-    .num-emerald {{ color: var(--emerald-neon); }}
-    .num-purple {{ color: var(--purple-neon); }}
+    .stat-cyan {{ color: var(--cyan); text-shadow: 0 0 12px var(--cyan-glow); }}
+    .stat-blue {{ color: var(--blue); text-shadow: 0 0 12px rgba(79, 172, 254, 0.4); }}
+    .stat-emerald {{ color: var(--emerald); text-shadow: 0 0 12px var(--emerald-glow); }}
+    .stat-purple {{ color: var(--purple); text-shadow: 0 0 12px var(--purple-glow); }}
 
     /* =========================================================================
-       GLASS BADGES
+       GLOSSY BADGES
        ========================================================================= */
-    .glass-badge {{
+    .gloss-badge {{
       font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
       display: inline-block;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }}
-    .badge-cyan {{ background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }}
-    .badge-blue {{ background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }}
-    .badge-emerald {{ background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }}
+    .badge-cyan {{ background: rgba(0, 242, 254, 0.2); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.45); }}
+    .badge-blue {{ background: rgba(79, 172, 254, 0.2); color: #4facfe; border: 1px solid rgba(79, 172, 254, 0.45); }}
+    .badge-emerald {{ background: rgba(0, 242, 169, 0.2); color: #00f2a9; border: 1px solid rgba(0, 242, 169, 0.45); }}
     .badge-emerald-glow {{
-      background: rgba(16, 185, 129, 0.25);
-      color: #6ee7b7;
-      border: 1px solid #10b981;
-      box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+      background: rgba(0, 242, 169, 0.25);
+      color: #ffffff;
+      border: 1px solid #00f2a9;
+      box-shadow: 0 0 20px var(--emerald-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }}
-    .badge-rose {{ background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }}
+    .badge-rose {{ background: rgba(255, 51, 102, 0.2); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.45); }}
     .badge-rose-glow {{
-      background: rgba(239, 68, 68, 0.25);
-      color: #fca5a5;
-      border: 1px solid #ef4444;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+      background: rgba(255, 51, 102, 0.25);
+      color: #ffffff;
+      border: 1px solid #ff3366;
+      box-shadow: 0 0 20px var(--rose-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }}
-    .badge-amber {{ background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }}
-    .badge-warning {{ background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }}
-    .badge-danger {{ background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }}
-    .badge-purple {{ background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }}
+    .badge-amber {{ background: rgba(255, 179, 0, 0.2); color: #ffb300; border: 1px solid rgba(255, 179, 0, 0.45); }}
+    .badge-warning {{ background: rgba(255, 179, 0, 0.2); color: #ffb300; border: 1px solid rgba(255, 179, 0, 0.45); }}
+    .badge-danger {{ background: rgba(255, 51, 102, 0.2); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.45); }}
+    .badge-purple {{ background: rgba(185, 39, 255, 0.2); color: #b927ff; border: 1px solid rgba(185, 39, 255, 0.45); }}
     .badge-purple-glow {{
-      background: rgba(168, 85, 247, 0.25);
-      color: #e9d5ff;
-      border: 1px solid #a855f7;
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
+      background: rgba(185, 39, 255, 0.25);
+      color: #ffffff;
+      border: 1px solid #b927ff;
+      box-shadow: 0 0 20px var(--purple-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }}
 
     /* =========================================================================
-       3. CHARTS SHOWCASE (3D GLASS FRAMES)
+       3. DIAGNOSTIC CHARTS (3D GLASS GALLERY)
        ========================================================================= */
-    .charts-grid-3d {{
+    .charts-stage-3d {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
-      gap: 24px;
-      margin-bottom: 44px;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 28px;
+      margin-bottom: 52px;
     }}
-    .chart-card-3d {{
-      padding: 20px;
+    .chart-slab-3d {{
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       cursor: pointer;
     }}
-    .chart-card-header {{
+    .chart-slab-head {{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }}
-    .chart-badge {{
+    .chart-pill-tag {{
       font-size: 11px;
-      font-weight: 700;
-      color: var(--cyan-neon);
-      background: rgba(56, 189, 248, 0.1);
-      padding: 3px 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      font-weight: 800;
+      color: var(--cyan);
+      background: rgba(0, 242, 254, 0.15);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.35);
     }}
-    .chart-img-frame {{
-      position: relative;
-      border-radius: 12px;
+    .chart-zoom-badge {{
+      font-size: 12px;
+      color: var(--cyan);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }}
+    .chart-display-canvas {{
+      border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       background: #020617;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
       transition: transform 0.3s ease;
     }}
-    .chart-img-frame img {{
+    .chart-display-canvas img {{
       width: 100%;
       height: auto;
       display: block;
       transition: transform 0.3s ease;
     }}
-    .chart-card-3d:hover .chart-img-frame img {{
-      transform: scale(1.02);
+    .chart-slab-3d:hover .chart-display-canvas img {{
+      transform: scale(1.03);
     }}
-    .chart-caption-bar {{
+    .chart-caption-row {{
       font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }}
-    .zoom-hint {{
-      font-size: 11px;
-      color: var(--cyan-neon);
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      font-weight: 700;
+      color: var(--text-body);
+      margin-top: 16px;
     }}
 
     /* =========================================================================
        4. VISUAL COUNTERFACTUAL INSPECTOR
        ========================================================================= */
-    .cf-container-3d {{
+    .cf-column-layout {{
       display: flex;
       flex-direction: column;
-      gap: 28px;
-      margin-bottom: 44px;
+      gap: 32px;
+      margin-bottom: 52px;
     }}
-    .cf-card {{
-      padding: 24px;
+    .cf-showcase-panel {{
+      padding: 28px;
     }}
-    .cf-card-header {{
+    .cf-header-bar {{
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 18px;
     }}
-    .tags-row {{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }}
-    .cf-edit-tag {{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--cyan-neon);
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 4px 10px;
-      border-radius: 8px;
-    }}
-    .cf-prompt {{
-      font-size: 14px;
-      color: #e2e8f0;
-      background: rgba(2, 6, 23, 0.7);
-      border-left: 3px solid var(--cyan-neon);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 20px;
+    .tags-cluster {{
       display: flex;
       align-items: center;
       gap: 10px;
     }}
-    .prompt-icon {{
-      font-size: 18px;
+    .cf-edit-pill {{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cyan);
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      padding: 5px 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }}
+    .cf-query-box {{
+      font-size: 15px;
+      color: #ffffff;
+      background: rgba(2, 6, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-left: 4px solid var(--cyan);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }}
+    .query-bulb {{
+      font-size: 20px;
     }}
 
-    .cf-comparison-3d {{
+    .cf-stage-3d {{
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
     }}
-    @media (max-width: 860px) {{
-      .cf-comparison-3d {{
+    @media (max-width: 900px) {{
+      .cf-stage-3d {{
         grid-template-columns: 1fr;
       }}
-      .flip-indicator-orbit {{
+      .orbital-flip-portal {{
         transform: rotate(90deg);
-        margin: 10px auto;
+        margin: 14px auto;
       }}
     }}
 
-    .twin-box-3d {{
-      background: rgba(2, 6, 23, 0.8);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px;
+    .twin-glass-pedestal {{
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
+      padding: 16px;
       text-align: center;
       cursor: pointer;
+      box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }}
-    .twin-box-3d:hover {{
-      transform: translateY(-4px) scale(1.01);
-      border-color: rgba(56, 189, 248, 0.5);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    .twin-glass-pedestal:hover {{
+      transform: translateY(-6px) scale(1.02);
+      border-color: var(--cyan);
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.8),
+        0 0 30px var(--cyan-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }}
-    .twin-badge-bar {{
+    .pedestal-top {{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
-      font-size: 11px;
-      font-weight: 700;
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 800;
       color: var(--text-muted);
     }}
-    .inspect-btn {{
-      color: var(--cyan-neon);
-      font-size: 11px;
-      opacity: 0.8;
+    .pedestal-zoom {{
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 700;
     }}
-    .img-wrapper-3d {{
+    .pedestal-img-frame {{
       width: 100%;
-      max-width: 380px;
-      margin: 0 auto 10px;
-      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto 12px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       background: #000;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }}
-    .diagram-img-3d {{
+    .pedestal-img {{
       width: 100%;
       aspect-ratio: 1;
       display: block;
       transition: transform 0.3s ease;
     }}
-    .twin-box-3d:hover .diagram-img-3d {{
-      transform: scale(1.03);
+    .twin-glass-pedestal:hover .pedestal-img {{
+      transform: scale(1.04);
     }}
-    .twin-answer-bar {{
+    .pedestal-bottom {{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 4px 6px 0;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 8px 0;
     }}
 
-    /* 3D Flip Orbit Badge */
-    .flip-indicator-orbit {{
+    /* 3D Rotating Orbital Flip Portal */
+    .orbital-flip-portal {{
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
+      width: 74px;
+      height: 74px;
     }}
-    .flip-icon-badge {{
+    .portal-ring {{
+      position: absolute;
+      border-radius: 50%;
+      border: 2px dashed rgba(0, 242, 254, 0.5);
+      pointer-events: none;
+    }}
+    .ring-outer {{
+      width: 74px;
+      height: 74px;
+      animation: spinClockwise 12s linear infinite;
+    }}
+    .ring-inner {{
       width: 58px;
       height: 58px;
+      border-color: rgba(185, 39, 255, 0.5);
+      animation: spinCounterClockwise 8s linear infinite;
+    }}
+    @keyframes spinClockwise {{
+      from {{ transform: rotate(0deg); }}
+      to {{ transform: rotate(360deg); }}
+    }}
+    @keyframes spinCounterClockwise {{
+      from {{ transform: rotate(360deg); }}
+      to {{ transform: rotate(0deg); }}
+    }}
+
+    .portal-core {{
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.9) 0%, rgba(185, 39, 255, 0.9) 100%);
+      box-shadow:
+        0 0 30px var(--cyan-glow),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      color: #ffffff;
+      font-weight: 900;
+      line-height: 1;
+      z-index: 2;
+    }}
+    .flip-arrows {{
       font-size: 16px;
-      font-weight: 800;
-      color: #38bdf8;
-      text-align: center;
-      line-height: 1.1;
-      animation: rotateGentle 8s ease-in-out infinite alternate;
     }}
-    .flip-icon-badge span {{
-      font-size: 9px;
+    .flip-sub {{
+      font-size: 8px;
       letter-spacing: 0.5px;
-    }}
-    @keyframes rotateGentle {{
-      0% {{ transform: rotate(-8deg); }}
-      100% {{ transform: rotate(8deg); }}
     }}
 
     /* =========================================================================
        5. ABSTENTION INSPECTOR
        ========================================================================= */
-    .abstention-grid-3d {{
+    .abstention-stage-3d {{
       display: grid;
       grid-template-columns: 1fr 1.3fr;
-      gap: 24px;
+      gap: 28px;
       align-items: center;
     }}
-    @media (max-width: 860px) {{
-      .abstention-grid-3d {{
+    @media (max-width: 900px) {{
+      .abstention-stage-3d {{
         grid-template-columns: 1fr;
       }}
     }}
-    .abstention-proof-box {{
-      background: rgba(2, 6, 23, 0.7);
-      border: 1px solid rgba(168, 85, 247, 0.25);
-      border-radius: 14px;
-      padding: 22px 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    .abstention-proof-card {{
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(185, 39, 255, 0.35);
+      border-radius: 18px;
+      padding: 26px 28px;
+      box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.6),
+        0 0 25px rgba(185, 39, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
     }}
-    .proof-title {{
-      font-size: 16px;
-      font-weight: 700;
-      color: #c084fc;
-      margin-bottom: 14px;
+    .proof-head {{
+      font-size: 18px;
+      font-weight: 800;
+      color: #e0aaff;
+      margin-bottom: 16px;
+      text-shadow: 0 0 15px var(--purple-glow);
     }}
-    .proof-list {{
+    .proof-items {{
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 13px;
+      gap: 12px;
+      font-size: 14px;
       color: #cbd5e1;
       line-height: 1.6;
     }}
-    .code-hl {{
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2px 6px;
-      border-radius: 4px;
+    .hl-code {{
+      background: rgba(255, 255, 255, 0.12);
+      padding: 3px 8px;
+      border-radius: 6px;
       font-family: monospace;
-      color: #38bdf8;
+      color: var(--cyan);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }}
 
     /* =========================================================================
-       6. LIGHTBOX MODAL (PURE JS)
+       6. LIGHTBOX MODAL
        ========================================================================= */
-    .lightbox-modal {{
+    .modal-lightbox {{
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       z-index: 1000;
       display: none;
       align-items: center;
@@ -1118,213 +1193,224 @@ class DashboardBuilder:
       opacity: 0;
       transition: opacity 0.25s ease;
     }}
-    .lightbox-modal.active {{
+    .modal-lightbox.active {{
       display: flex;
       opacity: 1;
     }}
-    .lightbox-content {{
-      max-width: 860px;
+    .modal-dialog-glass {{
+      max-width: 900px;
       width: 100%;
       background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      box-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.95),
+        0 0 50px var(--cyan-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
       overflow: hidden;
-      animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: zoomModalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
-    @keyframes modalPop {{
-      0% {{ transform: scale(0.92); opacity: 0; }}
+    @keyframes zoomModalIn {{
+      0% {{ transform: scale(0.9); opacity: 0; }}
       100% {{ transform: scale(1); opacity: 1; }}
     }}
-    .lightbox-header {{
-      padding: 16px 20px;
+    .modal-topbar {{
+      padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
     }}
-    .lightbox-title {{
-      font-size: 15px;
-      font-weight: 700;
-      color: #f8fafc;
-    }}
-    .lightbox-close {{
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
+    .modal-headline {{
+      font-size: 16px;
+      font-weight: 800;
       color: #ffffff;
-      width: 32px;
-      height: 32px;
+    }}
+    .modal-close-x {{
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
       font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, transform 0.2s ease;
     }}
-    .lightbox-close:hover {{
-      background: rgba(239, 68, 68, 0.5);
+    .modal-close-x:hover {{
+      background: rgba(255, 51, 102, 0.6);
+      transform: scale(1.1);
     }}
-    .lightbox-body {{
-      padding: 20px;
+    .modal-canvas-frame {{
+      padding: 24px;
       text-align: center;
     }}
-    .lightbox-body img {{
+    .modal-canvas-frame img {{
       max-width: 100%;
-      max-height: 70vh;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      max-height: 72vh;
+      border-radius: 14px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }}
 
     /* =========================================================================
        FOOTER
        ========================================================================= */
-    .footer-panel {{
-      padding: 28px 36px;
-      margin-top: 48px;
+    .footer-hero {{
+      padding: 32px 40px;
+      margin-top: 56px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
-      font-size: 13px;
+      gap: 20px;
+      font-size: 14px;
       color: var(--text-muted);
     }}
-    .footer-links {{
-      display: flex;
-      gap: 16px;
-    }}
-    .footer-link {{
-      color: var(--cyan-neon);
+    .footer-action-link {{
+      color: var(--cyan);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: text-shadow 0.2s ease;
+    }}
+    .footer-action-link:hover {{
+      text-shadow: 0 0 12px var(--cyan-glow);
     }}
   </style>
 </head>
 <body>
 
-  <!-- Animated Ambient Cosmic Glow Orbs -->
-  <div class="ambient-glow glow-cyan"></div>
-  <div class="ambient-glow glow-purple"></div>
-  <div class="ambient-glow glow-indigo"></div>
+  <!-- Dynamic Animated Aurora Glow Orbs -->
+  <div class="aurora-orb aurora-1"></div>
+  <div class="aurora-orb aurora-2"></div>
+  <div class="aurora-orb aurora-3"></div>
 
-  <div class="container">
+  <div class="app-viewport">
 
-    <!-- Header Panel -->
-    <header class="glass-panel header-panel">
-      <div class="header-top">
-        <div class="brand-group">
-          <div class="cube-logo-3d">🎲</div>
-          <div class="title-area">
+    <!-- Hero Header -->
+    <header class="glass-card-3d header-hero">
+      <div class="glass-sheen"></div>
+      <div class="hero-top-row">
+        <div class="hero-brand">
+          <div class="hero-logo-prism">🎲</div>
+          <div class="hero-titles">
             <h1>Visual Task Factory</h1>
-            <div class="subtitle">2D Spatial Occlusion & Multi-Layer Depth Reasoning Benchmark</div>
+            <div class="hero-tagline">2D Spatial Occlusion, Multi-Layer Depth Reasoning & Counterfactual Benchmark</div>
           </div>
         </div>
-        <div class="status-badge-gate">
-          <div class="pulse-dot"></div>
-          <span>VALIDATION GATE: 100% PASSED</span>
+        <div class="validation-shield">
+          <div class="pulse-laser"></div>
+          <span>VALIDATION GATE: 100% VERIFIED</span>
         </div>
       </div>
-      <div class="pill-tags-row">
-        <span class="glass-pill">📅 Timestamp: {now_str}</span>
-        <span class="glass-pill">⚡ Engine: Shapely Exact 2D Vector Math</span>
-        <span class="glass-pill">🛡️ Anti-Shortcut: Ollama dolphin3:8b Filter</span>
-        <span class="glass-pill">🚀 Playwright Headless Single-Instance</span>
-        <span class="glass-pill">🎯 Models Evaluated: {len(summary_metrics)}</span>
+      <div class="spec-pills-cluster">
+        <span class="spec-pill">📅 Timestamp: {now_str}</span>
+        <span class="spec-pill">⚡ Engine: Shapely Exact 2D Geometry</span>
+        <span class="spec-pill">🛡️ Anti-Shortcut: Live Ollama dolphin3:8b</span>
+        <span class="spec-pill">🚀 Playwright Headless Batch Engine</span>
+        <span class="spec-pill">🎯 Models Evaluated: {len(summary_metrics)}</span>
       </div>
     </header>
 
     <!-- 1. Executive Headline Metrics Grid -->
-    <div class="section-title-wrap">
-      <div class="section-badge-icon">📊</div>
-      <h2 class="section-title">1. Executive Benchmark Headline Metrics</h2>
+    <div class="section-banner">
+      <div class="section-icon-3d">📊</div>
+      <h2 class="section-banner-title">1. Executive Benchmark Headline Metrics</h2>
     </div>
-    <div class="metrics-grid-3d">
+    <div class="metrics-stage-3d">
 
       <!-- Metric 1: Open-Ended Accuracy -->
-      <div class="card-3d glass-panel metric-card-3d card-cyan">
-        <div class="card-glare"></div>
+      <div class="glass-card-3d metric-slab slab-cyan">
+        <div class="glass-sheen"></div>
         <div>
-          <div class="metric-top-bar">
-            <span class="metric-card-label">Top Model Open-Ended Acc</span>
-            <div class="metric-glow-orb">🎯</div>
+          <div class="metric-slab-head">
+            <span class="metric-slab-title">Top Open-Ended Acc</span>
+            <div class="metric-slab-badge">🎯</div>
           </div>
-          <div class="metric-val-hero">{top_open}%</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: {min(100.0, top_open)}%;"></div>
+          <div class="metric-slab-val">{top_open}%</div>
+          <div class="glass-meter-track">
+            <div class="glass-meter-fill" style="width: {min(100.0, top_open)}%;"></div>
           </div>
         </div>
-        <div class="metric-sub-bar">
+        <div class="metric-slab-foot">
           <span>{top_name}</span>
-          <span>vs. {baseline_name}: <strong>{baseline_open}%</strong></span>
+          <span>vs. {baseline_name}: <strong style="color: #fff;">{baseline_open}%</strong></span>
         </div>
       </div>
 
       <!-- Metric 2: MCQ Shortcut Gap -->
-      <div class="card-3d glass-panel metric-card-3d card-amber">
-        <div class="card-glare"></div>
+      <div class="glass-card-3d metric-slab slab-amber">
+        <div class="glass-sheen"></div>
         <div>
-          <div class="metric-top-bar">
-            <span class="metric-card-label">MCQ Shortcut Gap</span>
-            <div class="metric-glow-orb">⚡</div>
+          <div class="metric-slab-head">
+            <span class="metric-slab-title">MCQ Shortcut Gap</span>
+            <div class="metric-slab-badge">⚡</div>
           </div>
-          <div class="metric-val-hero">+{top_gap}%</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: {min(100.0, max(top_gap, baseline_gap))}%;"></div>
+          <div class="metric-slab-val">+{top_gap}%</div>
+          <div class="glass-meter-track">
+            <div class="glass-meter-fill" style="width: {min(100.0, max(top_gap, baseline_gap))}%;"></div>
           </div>
         </div>
-        <div class="metric-sub-bar">
+        <div class="metric-slab-foot">
           <span>{top_name}: +{top_gap}%</span>
-          <span>{baseline_name} gap reaches: <strong style="color: #fbbf24;">+{baseline_gap}%</strong></span>
+          <span>{baseline_name} gap reaches: <strong style="color: #ffb300;">+{baseline_gap}%</strong></span>
         </div>
       </div>
 
       <!-- Metric 3: Pairwise Consistency -->
-      <div class="card-3d glass-panel metric-card-3d card-emerald">
-        <div class="card-glare"></div>
+      <div class="glass-card-3d metric-slab slab-emerald">
+        <div class="glass-sheen"></div>
         <div>
-          <div class="metric-top-bar">
-            <span class="metric-card-label">Pairwise Consistency</span>
-            <div class="metric-glow-orb">🔄</div>
+          <div class="metric-slab-head">
+            <span class="metric-slab-title">Pairwise Consistency</span>
+            <div class="metric-slab-badge">🔄</div>
           </div>
-          <div class="metric-val-hero">{top_cons}%</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: {min(100.0, top_cons)}%;"></div>
+          <div class="metric-slab-val">{top_cons}%</div>
+          <div class="glass-meter-track">
+            <div class="glass-meter-fill" style="width: {min(100.0, top_cons)}%;"></div>
           </div>
         </div>
-        <div class="metric-sub-bar">
+        <div class="metric-slab-foot">
           <span>Strict Counterfactual Twins</span>
-          <span>{baseline_name}: <strong>{baseline_cons}%</strong></span>
+          <span>{baseline_name}: <strong style="color: #fff;">{baseline_cons}%</strong></span>
         </div>
       </div>
 
       <!-- Metric 4: Abstention Accuracy -->
-      <div class="card-3d glass-panel metric-card-3d card-purple">
-        <div class="card-glare"></div>
+      <div class="glass-card-3d metric-slab slab-purple">
+        <div class="glass-sheen"></div>
         <div>
-          <div class="metric-top-bar">
-            <span class="metric-card-label">Abstention Accuracy</span>
-            <div class="metric-glow-orb">🛡️</div>
+          <div class="metric-slab-head">
+            <span class="metric-slab-title">Abstention Accuracy</span>
+            <div class="metric-slab-badge">🛡️</div>
           </div>
-          <div class="metric-val-hero">{top_abs}%</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: {min(100.0, top_abs)}%;"></div>
+          <div class="metric-slab-val">{top_abs}%</div>
+          <div class="glass-meter-track">
+            <div class="glass-meter-fill" style="width: {min(100.0, top_abs)}%;"></div>
           </div>
         </div>
-        <div class="metric-sub-bar">
-          <span>100% Occluded Hidden Nodes</span>
-          <span>{baseline_name} Hallucination: <strong style="color: #f87171;">{100.0 - baseline_abs:.1f}%</strong></span>
+        <div class="metric-slab-foot">
+          <span>100% Occluded Targets</span>
+          <span>{baseline_name} Hallucination: <strong style="color: #ff3366;">{100.0 - baseline_abs:.1f}%</strong></span>
         </div>
       </div>
 
     </div>
 
     <!-- 2. Model Leaderboard -->
-    <div class="section-title-wrap">
-      <div class="section-badge-icon">🏆</div>
-      <h2 class="section-title">2. Model Leaderboard & Core Evaluation Primitives</h2>
+    <div class="section-banner">
+      <div class="section-icon-3d">🏆</div>
+      <h2 class="section-banner-title">2. Model Leaderboard & Core Evaluation Primitives</h2>
     </div>
-    <div class="glass-panel table-container-3d">
+    <div class="glass-card-3d leaderboard-slab">
+      <div class="glass-sheen"></div>
       <table>
         <thead>
           <tr>
@@ -1343,107 +1429,109 @@ class DashboardBuilder:
       </table>
     </div>
 
-    <!-- 3. Diagnostic Charts Showcase -->
-    <div class="section-title-wrap">
-      <div class="section-badge-icon">📈</div>
-      <h2 class="section-title">3. Diagnostic Visual Analytics (300 DPI Publication Quality)</h2>
+    <!-- 3. Publication Charts Showcase -->
+    <div class="section-banner">
+      <div class="section-icon-3d">📈</div>
+      <h2 class="section-banner-title">3. Diagnostic Visual Analytics (300 DPI Publication Quality)</h2>
     </div>
-    <div class="charts-grid-3d">
+    <div class="charts-stage-3d">
 
       <!-- Chart 1 -->
-      <div class="card-3d glass-panel chart-card-3d" onclick="openLightbox('{c1_b64}', 'Figure 1: VLM Accuracy Degradation Across Difficulty Tiers')">
-        <div class="card-glare"></div>
-        <div class="chart-card-header">
-          <span class="chart-badge">DIFFICULTY DEGRADATION</span>
-          <span class="zoom-hint">⛶ Click to Zoom</span>
+      <div class="glass-card-3d chart-slab-3d" onclick="openLightbox('{c1_b64}', 'Figure 1: VLM Accuracy Degradation Across Difficulty Tiers')">
+        <div class="glass-sheen"></div>
+        <div class="chart-slab-head">
+          <span class="chart-pill-tag">DIFFICULTY DEGRADATION</span>
+          <span class="chart-zoom-badge">⛶ Click to Inspect</span>
         </div>
-        <div class="chart-img-frame">
+        <div class="chart-display-canvas">
           <img src="{c1_b64}" alt="Accuracy by Difficulty Tier" />
         </div>
-        <div class="chart-caption-bar">
-          <span>Figure 1: Performance Drop across Easy, Medium, and Hard</span>
+        <div class="chart-caption-row">
+          Figure 1: Monotonic Accuracy Drop across Easy, Medium, and Hard
         </div>
       </div>
 
       <!-- Chart 2 -->
-      <div class="card-3d glass-panel chart-card-3d" onclick="openLightbox('{c2_b64}', 'Figure 2: Evaluation Primitives — MCQ Shortcut Gap & Pairwise Consistency')">
-        <div class="card-glare"></div>
-        <div class="chart-card-header">
-          <span class="chart-badge">EVALUATION PRIMITIVES</span>
-          <span class="zoom-hint">⛶ Click to Zoom</span>
+      <div class="glass-card-3d chart-slab-3d" onclick="openLightbox('{c2_b64}', 'Figure 2: Evaluation Primitives — MCQ Shortcut Gap & Pairwise Consistency')">
+        <div class="glass-sheen"></div>
+        <div class="chart-slab-head">
+          <span class="chart-pill-tag">EVALUATION PRIMITIVES</span>
+          <span class="chart-zoom-badge">⛶ Click to Inspect</span>
         </div>
-        <div class="chart-img-frame">
+        <div class="chart-display-canvas">
           <img src="{c2_b64}" alt="Consistency and MCQ Gap" />
         </div>
-        <div class="chart-caption-bar">
-          <span>Figure 2: MCQ Guessing Gap vs. True Pairwise Depth Grounding</span>
+        <div class="chart-caption-row">
+          Figure 2: The MCQ Guessing Illusion vs. Strict Pairwise Grounding
         </div>
       </div>
 
       <!-- Chart 3 -->
-      <div class="card-3d glass-panel chart-card-3d" onclick="openLightbox('{c3_b64}', 'Figure 3: Accuracy Drop-Off Plotted Against Exact Shapely Occlusion Ratio')">
-        <div class="card-glare"></div>
-        <div class="chart-card-header">
-          <span class="chart-badge">OCCLUSION SENSITIVITY</span>
-          <span class="zoom-hint">⛶ Click to Zoom</span>
+      <div class="glass-card-3d chart-slab-3d" onclick="openLightbox('{c3_b64}', 'Figure 3: Accuracy Drop-Off Plotted Against Exact Shapely Occlusion Ratio')">
+        <div class="glass-sheen"></div>
+        <div class="chart-slab-head">
+          <span class="chart-pill-tag">OCCLUSION SENSITIVITY</span>
+          <span class="chart-zoom-badge">⛶ Click to Inspect</span>
         </div>
-        <div class="chart-img-frame">
+        <div class="chart-display-canvas">
           <img src="{c3_b64}" alt="Occlusion Drop-Off" />
         </div>
-        <div class="chart-caption-bar">
-          <span>Figure 3: Fine-Grained Accuracy Degradation by Occlusion Ratio</span>
+        <div class="chart-caption-row">
+          Figure 3: Shapely Occlusion Ratio Degradation Curve
         </div>
       </div>
 
     </div>
 
     <!-- 4. Visual Counterfactual Inspector -->
-    <div class="section-title-wrap">
-      <div class="section-badge-icon">🔀</div>
-      <h2 class="section-title">4. Visual Counterfactual Inspector: Surgical 98% Identity Twin Pairs</h2>
+    <div class="section-banner">
+      <div class="section-icon-3d">🔀</div>
+      <h2 class="section-banner-title">4. Visual Counterfactual Inspector: Surgical 98% Identity Twin Pairs</h2>
     </div>
-    <div class="cf-container-3d">
+    <div class="cf-column-layout">
       {"".join(cf_cards)}
     </div>
 
     <!-- 5. Abstention & Hallucination Inspector -->
-    <div class="section-title-wrap">
-      <div class="section-badge-icon">🛡️</div>
-      <h2 class="section-title">5. Abstention Reliability: Unanswerable Hidden Targets</h2>
+    <div class="section-banner">
+      <div class="section-icon-3d">🛡️</div>
+      <h2 class="section-banner-title">5. Abstention Reliability: Unanswerable Hidden Targets</h2>
     </div>
-    <div class="cf-container-3d">
+    <div class="cf-column-layout">
       {abstention_html}
     </div>
 
     <!-- Footer -->
-    <footer class="glass-panel footer-panel">
+    <footer class="glass-card-3d footer-hero">
+      <div class="glass-sheen"></div>
       <div>
         <strong>Visual Task Factory</strong> • Built for the InnoData Visual Reasoning Benchmark Hackathon
       </div>
-      <div class="footer-links">
-        <a href="https://github.com/Rasagna8412/visual-task-factory" target="_blank" class="footer-link">GitHub Repository ↗</a>
+      <div>
+        <a href="https://github.com/Rasagna8412/visual-task-factory" target="_blank" class="footer-action-link">
+          GitHub Repository ↗
+        </a>
       </div>
     </footer>
 
   </div>
 
-  <!-- Lightbox Modal -->
-  <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
-    <div class="lightbox-content" onclick="event.stopPropagation()">
-      <div class="lightbox-header">
-        <div class="lightbox-title" id="lightboxTitle">Diagram Inspector</div>
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <!-- Interactive Lightbox Modal -->
+  <div class="modal-lightbox" id="lightboxModal" onclick="closeLightbox(event)">
+    <div class="modal-dialog-glass" onclick="event.stopPropagation()">
+      <div class="modal-topbar">
+        <div class="modal-headline" id="lightboxTitle">Diagram Inspector</div>
+        <button class="modal-close-x" onclick="closeLightbox()">✕</button>
       </div>
-      <div class="lightbox-body">
+      <div class="modal-canvas-frame">
         <img id="lightboxImg" src="" alt="Enlarged Diagram View" />
       </div>
     </div>
   </div>
 
-  <!-- Vanilla JS Interactive 3D Tilt & Specular Glare -->
+  <!-- Interactive 3D Card Tilt Script -->
   <script>
-    // 3D Tilt & Dynamic Glare Calculation
-    document.querySelectorAll('.card-3d').forEach(card => {{
+    document.querySelectorAll('.glass-card-3d').forEach(card => {{
       card.addEventListener('mousemove', e => {{
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -1451,12 +1539,10 @@ class DashboardBuilder:
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = ((y - centerY) / centerY) * -6; // max 6 deg
-        const rotateY = ((x - centerX) / centerX) * 6;  // max 6 deg
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
 
-        card.style.transform = `perspective(1000px) rotateX(${{rotateX.toFixed(2)}}deg) rotateY(${{rotateY.toFixed(2)}}deg) translateY(-2px)`;
-        card.style.setProperty('--mouse-x', `${{x}}px`);
-        card.style.setProperty('--mouse-y', `${{y}}px`);
+        card.style.transform = `perspective(1000px) rotateX(${{rotateX.toFixed(2)}}deg) rotateY(${{rotateY.toFixed(2)}}deg) translateY(-4px)`;
       }});
 
       card.addEventListener('mouseleave', () => {{
@@ -1464,7 +1550,6 @@ class DashboardBuilder:
       }});
     }});
 
-    // Lightbox Controls
     function openLightbox(imgSrc, title) {{
       if (!imgSrc) return;
       document.getElementById('lightboxImg').src = imgSrc;
@@ -1478,7 +1563,6 @@ class DashboardBuilder:
       modal.classList.remove('active');
     }}
 
-    // Close lightbox on Escape key
     document.addEventListener('keydown', e => {{
       if (e.key === 'Escape') closeLightbox();
     }});
