@@ -1,8 +1,8 @@
 """Dashboard Builder module for Visual Task Factory.
 
-Generates an ultra-premium, 3D Glassmorphic / Glossy UI Demo Day dashboard (`dashboard.html`)
-with realistic specular highlights, translucent frosted glass, dynamic neon rim lighting,
-and interactive 3D card physics.
+Generates an ultra-premium, refined 3D Glassmorphic Demo Day dashboard (`dashboard.html`)
+with balanced, elegant color intensity, comfortable contrast, realistic specular highlights,
+translucent frosted glass, and interactive 3D card physics.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ def _b64_img(img_path: Path) -> str:
 
 
 class DashboardBuilder:
-    """Builds self-contained HTML Demo Day dashboard with high-gloss 3D glassmorphism."""
+    """Builds self-contained HTML Demo Day dashboard with balanced, elegant 3D glassmorphism."""
 
     def __init__(self, run_dir: Union[str, Path]) -> None:
         self.run_dir = Path(run_dir)
@@ -40,7 +40,6 @@ class DashboardBuilder:
         """Assembles dashboard.html in run_dir."""
         out_html = self.run_dir / "dashboard.html"
 
-        # Locate charts and convert to base64 for standalone portability
         c1_path = self.charts_dir / "accuracy_by_difficulty.png"
         c2_path = self.charts_dir / "consistency_and_mcq_gap.png"
         c3_path = self.charts_dir / "occlusion_dropoff.png"
@@ -49,11 +48,9 @@ class DashboardBuilder:
         c2_b64 = _b64_img(c2_path)
         c3_b64 = _b64_img(c3_path)
 
-        # Discover counterfactual pairs if not explicitly passed
         if not cf_pairs_data:
             cf_pairs_data = self._discover_cf_pairs()
 
-        # Discover abstention task if available
         abstention_data = self._discover_abstention_task()
 
         html_content = self._render_template(
@@ -164,7 +161,7 @@ class DashboardBuilder:
         cf_pairs: List[Dict[str, Any]],
         abstention: Optional[Dict[str, Any]],
     ) -> str:
-        """Renders the comprehensive 3D high-gloss glassmorphic HTML5 template."""
+        """Renders the balanced, elegant 3D glassmorphic HTML5 template."""
         now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sorted_models = sorted(
@@ -208,10 +205,10 @@ class DashboardBuilder:
               </td>
               <td><span class="stat-num stat-cyan">{d.get('open_ended_accuracy', 0)}%</span></td>
               <td><span class="stat-num stat-blue">{d.get('mcq_accuracy', 0)}%</span></td>
-              <td><span class="gloss-badge badge-warning">{gap_sign}{gap_val}%</span></td>
+              <td><span class="gloss-badge badge-amber">{gap_sign}{gap_val}%</span></td>
               <td><span class="stat-num stat-emerald">{d.get('pairwise_consistency', 0)}%</span></td>
               <td><span class="stat-num stat-purple">{d.get('abstention_accuracy', 0)}%</span></td>
-              <td><span class="gloss-badge badge-danger">{d.get('hallucination_rate', 0)}%</span></td>
+              <td><span class="gloss-badge badge-rose">{d.get('hallucination_rate', 0)}%</span></td>
             </tr>
             """)
 
@@ -335,26 +332,22 @@ class DashboardBuilder:
   <title>Visual Task Factory — 3D Glassmorphic Benchmark Suite</title>
   <style>
     /* =========================================================================
-       ULTRA-GLOSS 3D GLASSMORPHISM THEME
+       BALANCED, ELEGANT 3D GLASSMORPHISM THEME (COMFORTABLE CONTRAST)
        ========================================================================= */
     :root {{
-      --cyan: #00f2fe;
-      --cyan-glow: rgba(0, 242, 254, 0.45);
-      --blue: #4facfe;
-      --purple: #b927ff;
-      --purple-glow: rgba(185, 39, 255, 0.45);
-      --emerald: #00f2a9;
-      --emerald-glow: rgba(0, 242, 169, 0.45);
-      --amber: #ffb300;
-      --amber-glow: rgba(255, 179, 0, 0.45);
-      --rose: #ff3366;
-      --rose-glow: rgba(255, 51, 102, 0.45);
+      --cyan: #38bdf8;
+      --blue: #60a5fa;
+      --purple: #a78bfa;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --rose: #f87171;
 
-      --glass-surface: rgba(255, 255, 255, 0.06);
-      --glass-surface-hover: rgba(255, 255, 255, 0.12);
-      --glass-border: rgba(255, 255, 255, 0.22);
-      --glass-border-light: rgba(255, 255, 255, 0.45);
-      --glass-blur: blur(28px) saturate(210%);
+      --bg-base: #0a0f1d;
+      --card-glass: rgba(15, 23, 42, 0.78);
+      --card-glass-hover: rgba(20, 30, 55, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-hover: rgba(255, 255, 255, 0.25);
+      --glass-blur: blur(20px) saturate(160%);
 
       --text-hero: #ffffff;
       --text-body: #e2e8f0;
@@ -369,14 +362,13 @@ class DashboardBuilder:
     }}
 
     body {{
-      background-color: #030712;
+      background-color: var(--bg-base);
       background-image:
-        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.35) 0%, transparent 45%),
-        radial-gradient(circle at 90% 15%, rgba(6, 182, 212, 0.35) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, transparent 55%),
-        radial-gradient(circle at 80% 85%, rgba(244, 63, 94, 0.25) 0%, transparent 45%),
-        radial-gradient(circle at 20% 90%, rgba(16, 185, 129, 0.25) 0%, transparent 45%),
-        linear-gradient(180deg, #020617 0%, #030712 100%);
+        radial-gradient(circle at 15% 12%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 18%, rgba(167, 139, 250, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 55%, rgba(52, 211, 153, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(96, 165, 250, 0.06) 0%, transparent 45%),
+        linear-gradient(180deg, #070b14 0%, #0a0f1d 100%);
       color: var(--text-body);
       padding: 40px 24px 80px;
       line-height: 1.5;
@@ -385,57 +377,57 @@ class DashboardBuilder:
       position: relative;
     }}
 
-    /* Futuristic Luminous Grid Overlay */
+    /* Subtle Architectural Grid Overlay */
     body::before {{
       content: "";
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 44px 44px;
       pointer-events: none;
       z-index: 1;
     }}
 
-    /* Animated Dynamic Floating Aurora Orbs */
+    /* Soft, Subdued Ambient Atmosphere Orbs (Gentle & Pleasant) */
     .aurora-orb {{
       position: fixed;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(140px);
       pointer-events: none;
       z-index: 0;
-      opacity: 0.65;
-      animation: auroraFloat 22s ease-in-out infinite alternate;
+      opacity: 0.22;
+      animation: auroraFloat 24s ease-in-out infinite alternate;
     }}
     .aurora-1 {{
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, #00f2fe 0%, rgba(0, 242, 254, 0) 70%);
-      top: -150px;
-      left: -150px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #38bdf8 0%, rgba(56, 189, 248, 0) 70%);
+      top: -120px;
+      left: -120px;
     }}
     .aurora-2 {{
-      width: 750px;
-      height: 750px;
-      background: radial-gradient(circle, #b927ff 0%, rgba(185, 39, 255, 0) 70%);
-      top: 30%;
-      right: -250px;
-      animation-duration: 26s;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, #a78bfa 0%, rgba(167, 139, 250, 0) 70%);
+      top: 35%;
+      right: -200px;
+      animation-duration: 28s;
     }}
     .aurora-3 {{
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, #00f2a9 0%, rgba(0, 242, 169, 0) 70%);
-      bottom: -150px;
-      left: 25%;
-      animation-duration: 20s;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #34d399 0%, rgba(52, 211, 153, 0) 70%);
+      bottom: -100px;
+      left: 20%;
+      animation-duration: 22s;
     }}
 
     @keyframes auroraFloat {{
-      0% {{ transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }}
-      50% {{ transform: translate3d(60px, -50px, 0) rotate(90deg) scale(1.1); }}
-      100% {{ transform: translate3d(-50px, 60px, 0) rotate(180deg) scale(0.95); }}
+      0% {{ transform: translate3d(0, 0, 0) scale(1); }}
+      50% {{ transform: translate3d(40px, -35px, 0) scale(1.06); }}
+      100% {{ transform: translate3d(-35px, 40px, 0) scale(0.96); }}
     }}
 
     .app-viewport {{
@@ -446,135 +438,121 @@ class DashboardBuilder:
     }}
 
     /* =========================================================================
-       3D GLASSMORPHIC CARDS & SPECULAR SHEEN
+       3D GLASSMORPHIC CARDS WITH CONTROLLED SPECULAR REFLECTION
        ========================================================================= */
     .glass-card-3d {{
-      background: var(--glass-surface);
+      background: var(--card-glass);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--glass-border);
-      border-radius: 24px;
+      border-radius: 20px;
       box-shadow:
-        0 20px 50px -10px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-        0 2px 0 0 rgba(255, 255, 255, 0.4) inset;
+        0 16px 40px -10px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
     }}
 
     .glass-card-3d:hover {{
-      border-color: var(--glass-border-light);
+      background: var(--card-glass-hover);
+      border-color: var(--glass-border-hover);
       box-shadow:
-        0 30px 70px -10px rgba(0, 0, 0, 0.8),
-        0 0 30px rgba(0, 242, 254, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.25) inset,
-        0 2px 0 0 rgba(255, 255, 255, 0.6) inset;
+        0 24px 50px -10px rgba(0, 0, 0, 0.7),
+        0 0 20px rgba(56, 189, 248, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+        0 1px 0 0 rgba(255, 255, 255, 0.4) inset;
     }}
 
-    /* Glossy Diagonal Specular Light Reflection */
+    /* Refined Specular Light Sheen */
     .glass-sheen {{
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.05) 25%,
-        transparent 50%
-      );
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
       pointer-events: none;
-      transform: rotate(15deg);
-      transition: opacity 0.3s ease;
-      opacity: 0.7;
-    }}
-    .glass-card-3d:hover .glass-sheen {{
-      opacity: 1;
     }}
 
     /* =========================================================================
        HERO HEADER PANEL
        ========================================================================= */
     .header-hero {{
-      padding: 36px 40px;
-      margin-bottom: 40px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 32px 36px;
+      margin-bottom: 36px;
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.75) 100%);
     }}
     .hero-top-row {{
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 24px;
-      margin-bottom: 20px;
+      gap: 20px;
+      margin-bottom: 16px;
     }}
     .hero-brand {{
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 18px;
     }}
     .hero-logo-prism {{
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #b927ff 100%);
-      border-radius: 18px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 50%, #8b5cf6 100%);
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
+      font-size: 26px;
       box-shadow:
-        0 15px 35px rgba(0, 242, 254, 0.4),
-        inset 0 2px 2px rgba(255, 255, 255, 0.7);
-      transform: perspective(600px) rotateX(12deg) rotateY(-12deg);
+        0 10px 24px rgba(2, 132, 199, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+      transform: perspective(600px) rotateX(10deg) rotateY(-10deg);
       transition: transform 0.4s ease;
     }}
     .hero-logo-prism:hover {{
-      transform: perspective(600px) rotateX(0deg) rotateY(0deg) scale(1.1);
+      transform: perspective(600px) rotateX(0deg) rotateY(0deg) scale(1.06);
     }}
     .hero-titles h1 {{
-      font-size: 34px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #ffffff 0%, #00f2fe 50%, #e0aaff 100%);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 10px rgba(0, 242, 254, 0.3));
       margin-bottom: 4px;
     }}
     .hero-titles .hero-tagline {{
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-muted);
       font-weight: 500;
     }}
 
     .validation-shield {{
-      background: rgba(0, 242, 169, 0.15);
-      border: 1px solid rgba(0, 242, 169, 0.5);
-      color: #00f2a9;
-      padding: 10px 20px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: #34d399;
+      padding: 8px 18px;
       border-radius: 9999px;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow:
-        0 0 30px rgba(0, 242, 169, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(12px);
+      gap: 8px;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+      backdrop-filter: blur(10px);
     }}
     .pulse-laser {{
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: #00f2a9;
-      box-shadow: 0 0 12px #00f2a9;
-      animation: laserPulse 1.6s infinite;
+      background: #34d399;
+      box-shadow: 0 0 8px #34d399;
+      animation: laserPulse 1.8s infinite;
     }}
     @keyframes laserPulse {{
       0%, 100% {{ transform: scale(1); opacity: 1; }}
@@ -584,22 +562,21 @@ class DashboardBuilder:
     .spec-pills-cluster {{
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
+      gap: 10px;
+      margin-top: 14px;
     }}
     .spec-pill {{
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 9999px;
-      padding: 6px 16px;
+      padding: 5px 14px;
       font-size: 12px;
       font-weight: 600;
-      color: #e2e8f0;
+      color: #cbd5e1;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       backdrop-filter: blur(10px);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }}
 
     /* =========================================================================
@@ -608,28 +585,28 @@ class DashboardBuilder:
     .section-banner {{
       display: flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 24px;
-      margin-top: 12px;
+      gap: 12px;
+      margin-bottom: 20px;
+      margin-top: 10px;
     }}
     .section-icon-3d {{
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.25) 0%, rgba(185, 39, 255, 0.25) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 8px 20px rgba(0, 242, 254, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      font-size: 16px;
+      color: var(--cyan);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }}
     .section-banner-title {{
-      font-size: 22px;
-      font-weight: 800;
-      color: #ffffff;
-      letter-spacing: -0.4px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      font-size: 20px;
+      font-weight: 700;
+      color: #f1f5f9;
+      letter-spacing: -0.3px;
     }}
 
     /* =========================================================================
@@ -637,134 +614,96 @@ class DashboardBuilder:
        ========================================================================= */
     .metrics-stage-3d {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 24px;
-      margin-bottom: 48px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 44px;
     }}
     .metric-slab {{
-      padding: 28px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 200px;
+      min-height: 185px;
     }}
     .metric-slab-head {{
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }}
     .metric-slab-title {{
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--text-muted);
     }}
     .metric-slab-badge {{
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      font-size: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
     }}
 
     .metric-slab-val {{
-      font-size: 46px;
-      font-weight: 900;
-      line-height: 1.05;
-      letter-spacing: -1.5px;
-      margin-bottom: 8px;
-      transform: translateZ(30px);
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+      transform: translateZ(24px);
     }}
     .metric-slab-foot {{
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }}
     .glass-meter-track {{
       width: 100%;
-      height: 8px;
-      background: rgba(255, 255, 255, 0.08);
+      height: 6px;
+      background: rgba(255, 255, 255, 0.06);
       border-radius: 9999px;
       overflow: hidden;
-      margin-top: 12px;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+      margin-top: 10px;
     }}
     .glass-meter-fill {{
       height: 100%;
       border-radius: 9999px;
-      box-shadow: 0 0 15px currentColor;
     }}
 
-    /* Card Glow Themes */
-    .slab-cyan {{
-      border-color: rgba(0, 242, 254, 0.35);
-      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.2);
-    }}
-    .slab-cyan .metric-slab-badge {{ background: rgba(0, 242, 254, 0.2); color: var(--cyan); }}
-    .slab-cyan .metric-slab-val {{
-      background: linear-gradient(180deg, #ffffff 0%, #00f2fe 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 15px var(--cyan-glow));
-    }}
-    .slab-cyan .glass-meter-fill {{ background: linear-gradient(90deg, #0284c7, #00f2fe); color: #00f2fe; }}
+    /* Card Themes with Subdued, Refined Accents */
+    .slab-cyan .metric-slab-badge {{ background: rgba(56, 189, 248, 0.15); color: var(--cyan); }}
+    .slab-cyan .metric-slab-val {{ color: var(--cyan); }}
+    .slab-cyan .glass-meter-fill {{ background: linear-gradient(90deg, #0284c7, #38bdf8); }}
 
-    .slab-amber {{
-      border-color: rgba(255, 179, 0, 0.35);
-      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 179, 0, 0.2);
-    }}
-    .slab-amber .metric-slab-badge {{ background: rgba(255, 179, 0, 0.2); color: var(--amber); }}
-    .slab-amber .metric-slab-val {{
-      background: linear-gradient(180deg, #ffffff 0%, #ffb300 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 15px var(--amber-glow));
-    }}
-    .slab-amber .glass-meter-fill {{ background: linear-gradient(90deg, #d97706, #ffb300); color: #ffb300; }}
+    .slab-amber .metric-slab-badge {{ background: rgba(251, 191, 36, 0.15); color: var(--amber); }}
+    .slab-amber .metric-slab-val {{ color: var(--amber); }}
+    .slab-amber .glass-meter-fill {{ background: linear-gradient(90deg, #d97706, #fbbf24); }}
 
-    .slab-emerald {{
-      border-color: rgba(0, 242, 169, 0.35);
-      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 169, 0.2);
-    }}
-    .slab-emerald .metric-slab-badge {{ background: rgba(0, 242, 169, 0.2); color: var(--emerald); }}
-    .slab-emerald .metric-slab-val {{
-      background: linear-gradient(180deg, #ffffff 0%, #00f2a9 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 15px var(--emerald-glow));
-    }}
-    .slab-emerald .glass-meter-fill {{ background: linear-gradient(90deg, #059669, #00f2a9); color: #00f2a9; }}
+    .slab-emerald .metric-slab-badge {{ background: rgba(52, 211, 153, 0.15); color: var(--emerald); }}
+    .slab-emerald .metric-slab-val {{ color: var(--emerald); }}
+    .slab-emerald .glass-meter-fill {{ background: linear-gradient(90deg, #059669, #34d399); }}
 
-    .slab-purple {{
-      border-color: rgba(185, 39, 255, 0.35);
-      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(185, 39, 255, 0.2);
-    }}
-    .slab-purple .metric-slab-badge {{ background: rgba(185, 39, 255, 0.2); color: var(--purple); }}
-    .slab-purple .metric-slab-val {{
-      background: linear-gradient(180deg, #ffffff 0%, #b927ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 4px 15px var(--purple-glow));
-    }}
-    .slab-purple .glass-meter-fill {{ background: linear-gradient(90deg, #7c3aed, #b927ff); color: #b927ff; }}
+    .slab-purple .metric-slab-badge {{ background: rgba(167, 139, 250, 0.15); color: var(--purple); }}
+    .slab-purple .metric-slab-val {{ color: var(--purple); }}
+    .slab-purple .glass-meter-fill {{ background: linear-gradient(90deg, #7c3aed, #a78bfa); }}
 
     /* =========================================================================
-       2. LEADERBOARD TABLE (LUMINOUS FROSTED GLASS)
+       2. LEADERBOARD TABLE (FROSTED GLASS)
        ========================================================================= */
     .leaderboard-slab {{
-      padding: 6px;
-      margin-bottom: 52px;
+      padding: 4px;
+      margin-bottom: 44px;
     }}
     table {{
       width: 100%;
@@ -773,102 +712,98 @@ class DashboardBuilder:
       font-size: 14px;
     }}
     thead th {{
-      background: rgba(255, 255, 255, 0.05);
-      padding: 18px 22px;
-      font-weight: 800;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 16px 20px;
+      font-weight: 700;
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
       color: var(--text-muted);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 1px solid var(--glass-border);
     }}
     tbody tr {{
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       transition: background 0.2s ease, transform 0.2s ease;
     }}
     tbody tr:hover {{
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.04);
     }}
     tbody tr:last-child {{
       border-bottom: none;
     }}
     td {{
-      padding: 20px 22px;
+      padding: 18px 20px;
       vertical-align: middle;
     }}
     .model-cell {{
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }}
     .glass-rank-pill {{
-      font-size: 12px;
-      font-weight: 800;
-      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      white-space: nowrap;
     }}
     .model-title {{
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       color: #ffffff;
     }}
     .model-meta {{
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
     }}
     .stat-num {{
-      font-weight: 900;
-      font-size: 16px;
-      letter-spacing: -0.5px;
+      font-weight: 800;
+      font-size: 15px;
     }}
-    .stat-cyan {{ color: var(--cyan); text-shadow: 0 0 12px var(--cyan-glow); }}
-    .stat-blue {{ color: var(--blue); text-shadow: 0 0 12px rgba(79, 172, 254, 0.4); }}
-    .stat-emerald {{ color: var(--emerald); text-shadow: 0 0 12px var(--emerald-glow); }}
-    .stat-purple {{ color: var(--purple); text-shadow: 0 0 12px var(--purple-glow); }}
+    .stat-cyan {{ color: var(--cyan); }}
+    .stat-blue {{ color: var(--blue); }}
+    .stat-emerald {{ color: var(--emerald); }}
+    .stat-purple {{ color: var(--purple); }}
 
     /* =========================================================================
        GLOSSY BADGES
        ========================================================================= */
     .gloss-badge {{
       font-size: 11px;
-      font-weight: 800;
-      padding: 5px 12px;
-      border-radius: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       display: inline-block;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(8px);
     }}
-    .badge-cyan {{ background: rgba(0, 242, 254, 0.2); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.45); }}
-    .badge-blue {{ background: rgba(79, 172, 254, 0.2); color: #4facfe; border: 1px solid rgba(79, 172, 254, 0.45); }}
-    .badge-emerald {{ background: rgba(0, 242, 169, 0.2); color: #00f2a9; border: 1px solid rgba(0, 242, 169, 0.45); }}
+    .badge-cyan {{ background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }}
+    .badge-blue {{ background: rgba(96, 165, 250, 0.12); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.3); }}
+    .badge-emerald {{ background: rgba(52, 211, 153, 0.12); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }}
     .badge-emerald-glow {{
-      background: rgba(0, 242, 169, 0.25);
-      color: #ffffff;
-      border: 1px solid #00f2a9;
-      box-shadow: 0 0 20px var(--emerald-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      background: rgba(16, 185, 129, 0.2);
+      color: #a7f3d0;
+      border: 1px solid #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
     }}
-    .badge-rose {{ background: rgba(255, 51, 102, 0.2); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.45); }}
+    .badge-rose {{ background: rgba(248, 113, 113, 0.12); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }}
     .badge-rose-glow {{
-      background: rgba(255, 51, 102, 0.25);
-      color: #ffffff;
-      border: 1px solid #ff3366;
-      box-shadow: 0 0 20px var(--rose-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      background: rgba(239, 68, 68, 0.2);
+      color: #fecaca;
+      border: 1px solid #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
     }}
-    .badge-amber {{ background: rgba(255, 179, 0, 0.2); color: #ffb300; border: 1px solid rgba(255, 179, 0, 0.45); }}
-    .badge-warning {{ background: rgba(255, 179, 0, 0.2); color: #ffb300; border: 1px solid rgba(255, 179, 0, 0.45); }}
-    .badge-danger {{ background: rgba(255, 51, 102, 0.2); color: #ff3366; border: 1px solid rgba(255, 51, 102, 0.45); }}
-    .badge-purple {{ background: rgba(185, 39, 255, 0.2); color: #b927ff; border: 1px solid rgba(185, 39, 255, 0.45); }}
+    .badge-amber {{ background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }}
+    .badge-purple {{ background: rgba(167, 139, 250, 0.12); color: #c084fc; border: 1px solid rgba(167, 139, 250, 0.3); }}
     .badge-purple-glow {{
-      background: rgba(185, 39, 255, 0.25);
-      color: #ffffff;
-      border: 1px solid #b927ff;
-      box-shadow: 0 0 20px var(--purple-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      background: rgba(167, 139, 250, 0.2);
+      color: #f3e8ff;
+      border: 1px solid #a78bfa;
+      box-shadow: 0 0 10px rgba(167, 139, 250, 0.25);
     }}
 
     /* =========================================================================
@@ -876,12 +811,12 @@ class DashboardBuilder:
        ========================================================================= */
     .charts-stage-3d {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 28px;
-      margin-bottom: 52px;
+      grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+      gap: 24px;
+      margin-bottom: 44px;
     }}
     .chart-slab-3d {{
-      padding: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -891,47 +826,46 @@ class DashboardBuilder:
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }}
     .chart-pill-tag {{
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--cyan);
-      background: rgba(0, 242, 254, 0.15);
-      padding: 4px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(0, 242, 254, 0.35);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
     }}
     .chart-zoom-badge {{
-      font-size: 12px;
+      font-size: 11px;
       color: var(--cyan);
-      font-weight: 700;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }}
     .chart-display-canvas {{
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background: #020617;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      transition: transform 0.3s ease;
+      transition: transform 0.25s ease;
     }}
     .chart-display-canvas img {{
       width: 100%;
       height: auto;
       display: block;
-      transition: transform 0.3s ease;
+      transition: transform 0.25s ease;
     }}
     .chart-slab-3d:hover .chart-display-canvas img {{
-      transform: scale(1.03);
+      transform: scale(1.02);
     }}
     .chart-caption-row {{
       font-size: 13px;
-      font-weight: 700;
-      color: var(--text-body);
-      margin-top: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 14px;
     }}
 
     /* =========================================================================
@@ -940,113 +874,105 @@ class DashboardBuilder:
     .cf-column-layout {{
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      margin-bottom: 52px;
+      gap: 28px;
+      margin-bottom: 44px;
     }}
     .cf-showcase-panel {{
-      padding: 28px;
+      padding: 24px;
     }}
     .cf-header-bar {{
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 16px;
     }}
     .tags-cluster {{
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }}
     .cf-edit-pill {{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 600;
       color: var(--cyan);
-      background: rgba(0, 242, 254, 0.1);
-      border: 1px solid rgba(0, 242, 254, 0.35);
-      padding: 5px 12px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 4px 10px;
+      border-radius: 8px;
     }}
     .cf-query-box {{
-      font-size: 15px;
+      font-size: 14px;
       color: #ffffff;
-      background: rgba(2, 6, 23, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-left: 4px solid var(--cyan);
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 24px;
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid var(--cyan);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      gap: 10px;
     }}
     .query-bulb {{
-      font-size: 20px;
+      font-size: 18px;
     }}
 
     .cf-stage-3d {{
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 24px;
+      gap: 20px;
     }}
-    @media (max-width: 900px) {{
+    @media (max-width: 860px) {{
       .cf-stage-3d {{
         grid-template-columns: 1fr;
       }}
       .orbital-flip-portal {{
         transform: rotate(90deg);
-        margin: 14px auto;
+        margin: 12px auto;
       }}
     }}
 
     .twin-glass-pedestal {{
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 18px;
-      padding: 16px;
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 14px;
       text-align: center;
       cursor: pointer;
-      box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }}
     .twin-glass-pedestal:hover {{
-      transform: translateY(-6px) scale(1.02);
-      border-color: var(--cyan);
-      box-shadow:
-        0 25px 60px rgba(0, 0, 0, 0.8),
-        0 0 30px var(--cyan-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.7);
     }}
     .pedestal-top {{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      font-size: 12px;
-      font-weight: 800;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--text-muted);
     }}
     .pedestal-zoom {{
       color: var(--cyan);
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 11px;
+      opacity: 0.8;
     }}
     .pedestal-img-frame {{
       width: 100%;
-      max-width: 400px;
-      margin: 0 auto 12px;
-      border-radius: 12px;
+      max-width: 380px;
+      margin: 0 auto 10px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background: #000;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }}
     .pedestal-img {{
       width: 100%;
@@ -1055,42 +981,42 @@ class DashboardBuilder:
       transition: transform 0.3s ease;
     }}
     .twin-glass-pedestal:hover .pedestal-img {{
-      transform: scale(1.04);
+      transform: scale(1.03);
     }}
     .pedestal-bottom {{
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 6px 8px 0;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 6px 0;
     }}
 
-    /* 3D Rotating Orbital Flip Portal */
+    /* Balanced 3D Flip Orbit Badge */
     .orbital-flip-portal {{
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      width: 74px;
-      height: 74px;
+      width: 64px;
+      height: 64px;
     }}
     .portal-ring {{
       position: absolute;
       border-radius: 50%;
-      border: 2px dashed rgba(0, 242, 254, 0.5);
+      border: 1px dashed rgba(56, 189, 248, 0.4);
       pointer-events: none;
     }}
     .ring-outer {{
-      width: 74px;
-      height: 74px;
+      width: 64px;
+      height: 64px;
       animation: spinClockwise 12s linear infinite;
     }}
     .ring-inner {{
-      width: 58px;
-      height: 58px;
-      border-color: rgba(185, 39, 255, 0.5);
+      width: 50px;
+      height: 50px;
+      border-color: rgba(167, 139, 250, 0.4);
       animation: spinCounterClockwise 8s linear infinite;
     }}
     @keyframes spinClockwise {{
@@ -1103,24 +1029,23 @@ class DashboardBuilder:
     }}
 
     .portal-core {{
-      width: 50px;
-      height: 50px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.9) 0%, rgba(185, 39, 255, 0.9) 100%);
-      box-shadow:
-        0 0 30px var(--cyan-glow),
-        inset 0 1px 1px rgba(255, 255, 255, 0.8);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      font-weight: 900;
+      color: #38bdf8;
+      font-weight: 800;
       line-height: 1;
       z-index: 2;
     }}
     .flip-arrows {{
-      font-size: 16px;
+      font-size: 15px;
     }}
     .flip-sub {{
       font-size: 8px;
@@ -1133,47 +1058,42 @@ class DashboardBuilder:
     .abstention-stage-3d {{
       display: grid;
       grid-template-columns: 1fr 1.3fr;
-      gap: 28px;
+      gap: 24px;
       align-items: center;
     }}
-    @media (max-width: 900px) {{
+    @media (max-width: 860px) {{
       .abstention-stage-3d {{
         grid-template-columns: 1fr;
       }}
     }}
     .abstention-proof-card {{
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(185, 39, 255, 0.35);
-      border-radius: 18px;
-      padding: 26px 28px;
-      box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.6),
-        0 0 25px rgba(185, 39, 255, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid rgba(167, 139, 250, 0.25);
+      border-radius: 14px;
+      padding: 22px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }}
     .proof-head {{
-      font-size: 18px;
-      font-weight: 800;
-      color: #e0aaff;
-      margin-bottom: 16px;
-      text-shadow: 0 0 15px var(--purple-glow);
+      font-size: 16px;
+      font-weight: 700;
+      color: #c084fc;
+      margin-bottom: 14px;
     }}
     .proof-items {{
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      font-size: 14px;
+      gap: 10px;
+      font-size: 13px;
       color: #cbd5e1;
       line-height: 1.6;
     }}
     .hl-code {{
-      background: rgba(255, 255, 255, 0.12);
-      padding: 3px 8px;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
       font-family: monospace;
       color: var(--cyan);
-      border: 1px solid rgba(255, 255, 255, 0.15);
     }}
 
     /* =========================================================================
@@ -1182,9 +1102,9 @@ class DashboardBuilder:
     .modal-lightbox {{
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.92);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+      background: rgba(2, 6, 23, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       z-index: 1000;
       display: none;
       align-items: center;
@@ -1198,96 +1118,84 @@ class DashboardBuilder:
       opacity: 1;
     }}
     .modal-dialog-glass {{
-      max-width: 900px;
+      max-width: 880px;
       width: 100%;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 24px;
-      box-shadow:
-        0 30px 100px rgba(0, 0, 0, 0.95),
-        0 0 50px var(--cyan-glow),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9);
       overflow: hidden;
-      animation: zoomModalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: zoomModalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
     @keyframes zoomModalIn {{
-      0% {{ transform: scale(0.9); opacity: 0; }}
+      0% {{ transform: scale(0.92); opacity: 0; }}
       100% {{ transform: scale(1); opacity: 1; }}
     }}
     .modal-topbar {{
-      padding: 18px 24px;
+      padding: 16px 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
     }}
     .modal-headline {{
-      font-size: 16px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       color: #ffffff;
     }}
     .modal-close-x {{
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #ffffff;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s ease, transform 0.2s ease;
+      transition: background 0.2s ease;
     }}
     .modal-close-x:hover {{
-      background: rgba(255, 51, 102, 0.6);
-      transform: scale(1.1);
+      background: rgba(239, 68, 68, 0.5);
     }}
     .modal-canvas-frame {{
-      padding: 24px;
+      padding: 20px;
       text-align: center;
     }}
     .modal-canvas-frame img {{
       max-width: 100%;
-      max-height: 72vh;
-      border-radius: 14px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
     }}
 
     /* =========================================================================
        FOOTER
        ========================================================================= */
     .footer-hero {{
-      padding: 32px 40px;
-      margin-top: 56px;
+      padding: 28px 36px;
+      margin-top: 48px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
-      font-size: 14px;
+      gap: 16px;
+      font-size: 13px;
       color: var(--text-muted);
     }}
     .footer-action-link {{
       color: var(--cyan);
       text-decoration: none;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: text-shadow 0.2s ease;
-    }}
-    .footer-action-link:hover {{
-      text-shadow: 0 0 12px var(--cyan-glow);
+      font-weight: 700;
     }}
   </style>
 </head>
 <body>
 
-  <!-- Dynamic Animated Aurora Glow Orbs -->
+  <!-- Gentle Ambient Glow Orbs (Subtle, Non-Distracting) -->
   <div class="aurora-orb aurora-1"></div>
   <div class="aurora-orb aurora-2"></div>
   <div class="aurora-orb aurora-3"></div>
@@ -1360,7 +1268,7 @@ class DashboardBuilder:
         </div>
         <div class="metric-slab-foot">
           <span>{top_name}: +{top_gap}%</span>
-          <span>{baseline_name} gap reaches: <strong style="color: #ffb300;">+{baseline_gap}%</strong></span>
+          <span>{baseline_name} gap reaches: <strong style="color: var(--amber);">+{baseline_gap}%</strong></span>
         </div>
       </div>
 
@@ -1398,7 +1306,7 @@ class DashboardBuilder:
         </div>
         <div class="metric-slab-foot">
           <span>100% Occluded Targets</span>
-          <span>{baseline_name} Hallucination: <strong style="color: #ff3366;">{100.0 - baseline_abs:.1f}%</strong></span>
+          <span>{baseline_name} Hallucination: <strong style="color: var(--rose);">{100.0 - baseline_abs:.1f}%</strong></span>
         </div>
       </div>
 
@@ -1539,10 +1447,10 @@ class DashboardBuilder:
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = ((y - centerY) / centerY) * -5;
-        const rotateY = ((x - centerX) / centerX) * 5;
+        const rotateX = ((y - centerY) / centerY) * -4;
+        const rotateY = ((x - centerX) / centerX) * 4;
 
-        card.style.transform = `perspective(1000px) rotateX(${{rotateX.toFixed(2)}}deg) rotateY(${{rotateY.toFixed(2)}}deg) translateY(-4px)`;
+        card.style.transform = `perspective(1000px) rotateX(${{rotateX.toFixed(2)}}deg) rotateY(${{rotateY.toFixed(2)}}deg) translateY(-3px)`;
       }});
 
       card.addEventListener('mouseleave', () => {{
