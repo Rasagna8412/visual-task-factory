@@ -1,8 +1,9 @@
 """Dashboard Builder module for Visual Task Factory.
 
-Generates an ultra-premium, 3D Glassmorphic / Glossy UI Demo Day dashboard (`dashboard.html`)
+Generates an ultra-premium, vibrant 3D Glassmorphic Demo Day dashboard (`dashboard.html`)
 with realistic specular highlights, translucent frosted glass, dynamic neon rim lighting,
-and interactive 3D card physics.
+interactive 3D card physics, and an animated, interactive "⇄ FLIP" button that swaps
+counterfactual z-orders and inverts ground truth in real time with 3D card-flip animation.
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ def _b64_img(img_path: Path) -> str:
 
 
 class DashboardBuilder:
-    """Builds self-contained HTML Demo Day dashboard with high-gloss 3D glassmorphism."""
+    """Builds self-contained HTML Demo Day dashboard with interactive 3D glassmorphism."""
 
     def __init__(self, run_dir: Union[str, Path]) -> None:
         self.run_dir = Path(run_dir)
@@ -40,7 +41,6 @@ class DashboardBuilder:
         """Assembles dashboard.html in run_dir."""
         out_html = self.run_dir / "dashboard.html"
 
-        # Locate charts and convert to base64 for standalone portability
         c1_path = self.charts_dir / "accuracy_by_difficulty.png"
         c2_path = self.charts_dir / "consistency_and_mcq_gap.png"
         c3_path = self.charts_dir / "occlusion_dropoff.png"
@@ -49,11 +49,9 @@ class DashboardBuilder:
         c2_b64 = _b64_img(c2_path)
         c3_b64 = _b64_img(c3_path)
 
-        # Discover counterfactual pairs if not explicitly passed
         if not cf_pairs_data:
             cf_pairs_data = self._discover_cf_pairs()
 
-        # Discover abstention task if available
         abstention_data = self._discover_abstention_task()
 
         html_content = self._render_template(
@@ -164,7 +162,7 @@ class DashboardBuilder:
         cf_pairs: List[Dict[str, Any]],
         abstention: Optional[Dict[str, Any]],
     ) -> str:
-        """Renders the comprehensive 3D high-gloss glassmorphic HTML5 template."""
+        """Renders the comprehensive 3D high-gloss glassmorphic HTML5 template with interactive FLIP."""
         now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sorted_models = sorted(
@@ -215,7 +213,9 @@ class DashboardBuilder:
             </tr>
             """)
 
+        # Counterfactual Cards with Interactive FLIP components
         cf_cards = []
+        cf_dict_payload = {}
         for p in cf_pairs:
             diff_color = {
                 "easy": "badge-emerald",
@@ -223,13 +223,23 @@ class DashboardBuilder:
                 "hard": "badge-rose",
             }.get(p["difficulty"].lower(), "badge-blue")
 
+            pair_id = p["pair_id"]
+            cf_dict_payload[pair_id] = {
+                "pair_id": pair_id,
+                "base_b64": p["base_b64"],
+                "base_answer": p["base_answer"],
+                "cf_b64": p["cf_b64"],
+                "cf_answer": p["cf_answer"],
+            }
+
             cf_cards.append(f"""
-            <div class="glass-card-3d cf-showcase-panel">
+            <div class="glass-card-3d cf-showcase-panel" id="cf-panel-{pair_id}" data-flipped="false">
               <div class="glass-sheen"></div>
               <div class="cf-header-bar">
                 <div class="tags-cluster">
-                  <span class="gloss-badge badge-cyan">{p['pair_id'].upper()}</span>
+                  <span class="gloss-badge badge-cyan">{pair_id.upper()}</span>
                   <span class="gloss-badge {diff_color}">{p['difficulty'].upper()}</span>
+                  <span class="gloss-badge badge-flip-indicator" id="badge-mode-{pair_id}">BASELINE Z-ORDER</span>
                 </div>
                 <div class="cf-edit-pill">⚡ Surgical Edit: {p['edit']}</div>
               </div>
@@ -239,43 +249,59 @@ class DashboardBuilder:
                   <strong>Query:</strong> "{p['question']}"
                 </div>
               </div>
+
+              <!-- Interactive 3D Comparison Stage with Working Flip Button -->
               <div class="cf-stage-3d">
-                <div class="twin-glass-pedestal" onclick="openLightbox('{p['base_b64']}', 'Base Twin ({p['pair_id']}) — Ground Truth: {p['base_answer'].upper()}')">
+
+                <!-- Left Pedestal -->
+                <div class="twin-glass-pedestal twin-left" id="pedestal-left-{pair_id}" onclick="openActiveLightbox('{pair_id}', 'left')">
                   <div class="pedestal-top">
-                    <span class="twin-title">BASE TWIN (z-order A)</span>
+                    <span class="twin-title" id="title-left-{pair_id}">BASE TWIN (z-order A)</span>
                     <span class="pedestal-zoom">⛶ Inspect</span>
                   </div>
                   <div class="pedestal-img-frame">
-                    <img src="{p['base_b64']}" class="pedestal-img" alt="Base Scene" />
+                    <img src="{p['base_b64']}" class="pedestal-img" id="img-left-{pair_id}" alt="Base Diagram" />
                   </div>
                   <div class="pedestal-bottom">
                     <span class="ans-label">Ground Truth:</span>
-                    <span class="gloss-badge badge-emerald-glow">{p['base_answer'].upper()}</span>
+                    <span class="gloss-badge badge-emerald-glow" id="ans-left-{pair_id}">{p['base_answer'].upper()}</span>
                   </div>
                 </div>
 
-                <div class="orbital-flip-portal">
+                <!-- Animated Interactive Orbital Flip Button -->
+                <div class="orbital-flip-portal" id="portal-{pair_id}" onclick="triggerPairFlip('{pair_id}')" role="button" tabindex="0" title="Click to Flip Z-Order and Invert Ground Truth!">
                   <div class="portal-ring ring-outer"></div>
                   <div class="portal-ring ring-inner"></div>
-                  <div class="portal-core" title="Z-Order Inversion: Ground Truth Flips">
+                  <div class="portal-core">
                     <span class="flip-arrows">⇄</span>
                     <span class="flip-sub">FLIP</span>
                   </div>
+                  <div class="portal-click-prompt">CLICK TO FLIP</div>
                 </div>
 
-                <div class="twin-glass-pedestal" onclick="openLightbox('{p['cf_b64']}', 'Counterfactual Twin ({p['pair_id']}) — Ground Truth: {p['cf_answer'].upper()}')">
+                <!-- Right Pedestal -->
+                <div class="twin-glass-pedestal twin-right" id="pedestal-right-{pair_id}" onclick="openActiveLightbox('{pair_id}', 'right')">
                   <div class="pedestal-top">
-                    <span class="twin-title">COUNTERFACTUAL TWIN (z-order B)</span>
+                    <span class="twin-title" id="title-right-{pair_id}">COUNTERFACTUAL TWIN (z-order B)</span>
                     <span class="pedestal-zoom">⛶ Inspect</span>
                   </div>
                   <div class="pedestal-img-frame">
-                    <img src="{p['cf_b64']}" class="pedestal-img" alt="Counterfactual Scene" />
+                    <img src="{p['cf_b64']}" class="pedestal-img" id="img-right-{pair_id}" alt="Counterfactual Diagram" />
                   </div>
                   <div class="pedestal-bottom">
                     <span class="ans-label">Ground Truth:</span>
-                    <span class="gloss-badge badge-rose-glow">{p['cf_answer'].upper()} (FLIPPED)</span>
+                    <span class="gloss-badge badge-rose-glow" id="ans-right-{pair_id}">{p['cf_answer'].upper()} (FLIPPED)</span>
                   </div>
                 </div>
+
+              </div>
+
+              <!-- Interactive Feedback Banner -->
+              <div class="flip-toast-bar" id="toast-{pair_id}">
+                <span class="toast-dot"></span>
+                <span class="toast-text" id="toast-text-{pair_id}">
+                  Click the animated <strong>⇄ FLIP</strong> button above to trigger an interactive 3D swap and observe ground-truth inversion in real time!
+                </span>
               </div>
             </div>
             """)
@@ -326,6 +352,8 @@ class DashboardBuilder:
               </div>
             </div>
             """
+
+        cf_json_string = json.dumps(cf_dict_payload)
 
         html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -870,6 +898,11 @@ class DashboardBuilder:
       border: 1px solid #b927ff;
       box-shadow: 0 0 20px var(--purple-glow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
     }}
+    .badge-flip-indicator {{
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }}
 
     /* =========================================================================
        3. DIAGNOSTIC CHARTS (3D GLASS GALLERY)
@@ -935,7 +968,7 @@ class DashboardBuilder:
     }}
 
     /* =========================================================================
-       4. VISUAL COUNTERFACTUAL INSPECTOR
+       4. VISUAL COUNTERFACTUAL INSPECTOR & WORKING FLIP BUTTON
        ========================================================================= */
     .cf-column-layout {{
       display: flex;
@@ -993,6 +1026,7 @@ class DashboardBuilder:
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 24px;
+      perspective: 1200px;
     }}
     @media (max-width: 900px) {{
       .cf-stage-3d {{
@@ -1000,7 +1034,7 @@ class DashboardBuilder:
       }}
       .orbital-flip-portal {{
         transform: rotate(90deg);
-        margin: 14px auto;
+        margin: 18px auto;
       }}
     }}
 
@@ -1014,7 +1048,8 @@ class DashboardBuilder:
       box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.6),
         inset 0 1px 0 rgba(255, 255, 255, 0.4);
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.3s ease;
+      transform-style: preserve-3d;
     }}
     .twin-glass-pedestal:hover {{
       transform: translateY(-6px) scale(1.02);
@@ -1066,16 +1101,33 @@ class DashboardBuilder:
       padding: 6px 8px 0;
     }}
 
-    /* 3D Rotating Orbital Flip Portal */
+    /* 3D Card Flip Animation States */
+    .pedestal-flipping {{
+      transform: perspective(1000px) rotateY(90deg) scale(0.92) !important;
+      opacity: 0.4;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease !important;
+    }}
+
+    /* Interactive Orbital Flip Button */
     .orbital-flip-portal {{
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
-      width: 74px;
-      height: 74px;
+      width: 82px;
+      height: 82px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }}
+    .orbital-flip-portal:hover {{
+      transform: scale(1.18);
+    }}
+    .orbital-flip-portal:active {{
+      transform: scale(0.92);
+    }}
+
     .portal-ring {{
       position: absolute;
       border-radius: 50%;
@@ -1083,13 +1135,13 @@ class DashboardBuilder:
       pointer-events: none;
     }}
     .ring-outer {{
-      width: 74px;
-      height: 74px;
+      width: 82px;
+      height: 82px;
       animation: spinClockwise 12s linear infinite;
     }}
     .ring-inner {{
-      width: 58px;
-      height: 58px;
+      width: 64px;
+      height: 64px;
       border-color: rgba(185, 39, 255, 0.5);
       animation: spinCounterClockwise 8s linear infinite;
     }}
@@ -1103,8 +1155,8 @@ class DashboardBuilder:
     }}
 
     .portal-core {{
-      width: 50px;
-      height: 50px;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
       background: linear-gradient(135deg, rgba(0, 242, 254, 0.9) 0%, rgba(185, 39, 255, 0.9) 100%);
       box-shadow:
@@ -1118,13 +1170,100 @@ class DashboardBuilder:
       font-weight: 900;
       line-height: 1;
       z-index: 2;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }}
     .flip-arrows {{
-      font-size: 16px;
+      font-size: 18px;
     }}
     .flip-sub {{
       font-size: 8px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
+    }}
+
+    .portal-click-prompt {{
+      position: absolute;
+      bottom: -22px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--cyan);
+      white-space: nowrap;
+      text-transform: uppercase;
+      opacity: 0.85;
+      text-shadow: 0 0 8px var(--cyan-glow);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }}
+    .orbital-flip-portal:hover .portal-click-prompt {{
+      opacity: 1;
+      transform: translateY(2px) scale(1.05);
+    }}
+
+    /* Electric Hyperspace Click Animation */
+    .portal-animating .ring-outer {{
+      animation: hyperSpinOuter 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }}
+    .portal-animating .ring-inner {{
+      animation: hyperSpinInner 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }}
+    .portal-animating .portal-core {{
+      animation: coreHyperBurst 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }}
+
+    @keyframes hyperSpinOuter {{
+      0% {{ transform: rotate(0deg) scale(1); }}
+      50% {{ transform: rotate(360deg) scale(1.35); border-color: #00f2fe; box-shadow: 0 0 35px #00f2fe; }}
+      100% {{ transform: rotate(720deg) scale(1); }}
+    }}
+    @keyframes hyperSpinInner {{
+      0% {{ transform: rotate(360deg) scale(1); }}
+      50% {{ transform: rotate(0deg) scale(1.25); border-color: #ff3366; box-shadow: 0 0 35px #ff3366; }}
+      100% {{ transform: rotate(-360deg) scale(1); }}
+    }}
+    @keyframes coreHyperBurst {{
+      0% {{ transform: scale(1); }}
+      50% {{ transform: scale(1.4) rotate(180deg); box-shadow: 0 0 50px #00f2fe, 0 0 40px #ff3366; }}
+      100% {{ transform: scale(1) rotate(360deg); }}
+    }}
+
+    .portal-active-flipped .portal-core {{
+      background: linear-gradient(135deg, rgba(255, 51, 102, 0.95) 0%, rgba(185, 39, 255, 0.95) 100%) !important;
+      box-shadow: 0 0 35px var(--rose-glow), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+    }}
+    .portal-active-flipped .ring-outer {{
+      border-color: rgba(255, 51, 102, 0.8) !important;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+    }}
+
+    /* Toast Bar */
+    .flip-toast-bar {{
+      margin-top: 22px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: rgba(2, 6, 23, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }}
+    .toast-dot {{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+      flex-shrink: 0;
+    }}
+    [data-flipped="true"] .flip-toast-bar {{
+      background: rgba(255, 51, 102, 0.1);
+      border-color: rgba(255, 51, 102, 0.35);
+      color: #fecaca;
+    }}
+    [data-flipped="true"] .toast-dot {{
+      background: var(--rose);
+      box-shadow: 0 0 10px var(--rose);
     }}
 
     /* =========================================================================
@@ -1483,7 +1622,7 @@ class DashboardBuilder:
 
     </div>
 
-    <!-- 4. Visual Counterfactual Inspector -->
+    <!-- 4. Visual Counterfactual Inspector with Interactive 3D FLIP -->
     <div class="section-banner">
       <div class="section-icon-3d">🔀</div>
       <h2 class="section-banner-title">4. Visual Counterfactual Inspector: Surgical 98% Identity Twin Pairs</h2>
@@ -1529,8 +1668,12 @@ class DashboardBuilder:
     </div>
   </div>
 
-  <!-- Interactive 3D Card Tilt Script -->
+  <!-- Embedded Counterfactual Twin Registry & Interactive Scripts -->
   <script>
+    // Injected Counterfactual Twins Payload
+    const cfData = {cf_json_string};
+
+    // 3D Card Tilt on Mouse Movement
     document.querySelectorAll('.glass-card-3d').forEach(card => {{
       card.addEventListener('mousemove', e => {{
         const rect = card.getBoundingClientRect();
@@ -1549,6 +1692,100 @@ class DashboardBuilder:
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
       }});
     }});
+
+    // Interactive 3D FLIP Button Handler
+    function triggerPairFlip(pairId) {{
+      const panel = document.getElementById('cf-panel-' + pairId);
+      const portal = document.getElementById('portal-' + pairId);
+      const leftPedestal = document.getElementById('pedestal-left-' + pairId);
+      const rightPedestal = document.getElementById('pedestal-right-' + pairId);
+      const badgeMode = document.getElementById('badge-mode-' + pairId);
+      const toastText = document.getElementById('toast-text-' + pairId);
+      const data = cfData[pairId];
+      if (!data) return;
+
+      // 1. Trigger Hyperspace Spin Animation on Portal Core
+      portal.classList.add('portal-animating');
+      setTimeout(() => portal.classList.remove('portal-animating'), 650);
+
+      // 2. Trigger 3D Card Flip on Both Pedestals
+      leftPedestal.classList.add('pedestal-flipping');
+      rightPedestal.classList.add('pedestal-flipping');
+
+      const isFlipped = panel.getAttribute('data-flipped') === 'true';
+
+      // 3. Swap Contents and Invert Answers at the 90-degree Midpoint
+      setTimeout(() => {{
+        if (!isFlipped) {{
+          panel.setAttribute('data-flipped', 'true');
+          portal.classList.add('portal-active-flipped');
+          badgeMode.textContent = '⇄ Z-ORDER INVERTED';
+          badgeMode.className = 'gloss-badge badge-rose-glow';
+
+          // Swap Left to show Counterfactual Twin
+          document.getElementById('title-left-' + pairId).textContent = 'COUNTERFACTUAL TWIN (z-order B)';
+          document.getElementById('img-left-' + pairId).src = data.cf_b64;
+          const ansL = document.getElementById('ans-left-' + pairId);
+          ansL.textContent = data.cf_answer.toUpperCase() + ' (FLIPPED)';
+          ansL.className = 'gloss-badge badge-rose-glow';
+
+          // Swap Right to show Base Twin
+          document.getElementById('title-right-' + pairId).textContent = 'BASE TWIN (z-order A)';
+          document.getElementById('img-right-' + pairId).src = data.base_b64;
+          const ansR = document.getElementById('ans-right-' + pairId);
+          ansR.textContent = data.base_answer.toUpperCase();
+          ansR.className = 'gloss-badge badge-emerald-glow';
+
+          toastText.innerHTML = '⚡ <strong>Z-Order Swapped!</strong> The two target shapes swapped layer depth &mdash; Ground truth inverted from <code>' + data.base_answer.toUpperCase() + '</code> to <code>' + data.cf_answer.toUpperCase() + '</code>. Click FLIP again to restore.';
+        }} else {{
+          panel.setAttribute('data-flipped', 'false');
+          portal.classList.remove('portal-active-flipped');
+          badgeMode.textContent = 'BASELINE Z-ORDER';
+          badgeMode.className = 'gloss-badge badge-flip-indicator';
+
+          // Restore Left to Base Twin
+          document.getElementById('title-left-' + pairId).textContent = 'BASE TWIN (z-order A)';
+          document.getElementById('img-left-' + pairId).src = data.base_b64;
+          const ansL = document.getElementById('ans-left-' + pairId);
+          ansL.textContent = data.base_answer.toUpperCase();
+          ansL.className = 'gloss-badge badge-emerald-glow';
+
+          // Restore Right to Counterfactual Twin
+          document.getElementById('title-right-' + pairId).textContent = 'COUNTERFACTUAL TWIN (z-order B)';
+          document.getElementById('img-right-' + pairId).src = data.cf_b64;
+          const ansR = document.getElementById('ans-right-' + pairId);
+          ansR.textContent = data.cf_answer.toUpperCase() + ' (FLIPPED)';
+          ansR.className = 'gloss-badge badge-rose-glow';
+
+          toastText.innerHTML = '✓ Restored to baseline z-order. Ground truth is <code>' + data.base_answer.toUpperCase() + '</code>. Click FLIP to swap again.';
+        }}
+      }}, 220);
+
+      // 4. Spring Pedestals Back into View
+      setTimeout(() => {{
+        leftPedestal.classList.remove('pedestal-flipping');
+        rightPedestal.classList.remove('pedestal-flipping');
+      }}, 500);
+    }}
+
+    // Lightbox Controls with Active State Detection
+    function openActiveLightbox(pairId, side) {{
+      const data = cfData[pairId];
+      if (!data) return;
+      const panel = document.getElementById('cf-panel-' + pairId);
+      const isFlipped = panel.getAttribute('data-flipped') === 'true';
+
+      let imgSrc = '';
+      let title = '';
+      if (side === 'left') {{
+        imgSrc = (!isFlipped) ? data.base_b64 : data.cf_b64;
+        title = (!isFlipped) ? `Base Twin (${{pairId}}) — Ground Truth: ${{data.base_answer.toUpperCase()}}` : `Counterfactual Twin (${{pairId}}) — Ground Truth: ${{data.cf_answer.toUpperCase()}} (FLIPPED)`;
+      }} else {{
+        imgSrc = (!isFlipped) ? data.cf_b64 : data.base_b64;
+        title = (!isFlipped) ? `Counterfactual Twin (${{pairId}}) — Ground Truth: ${{data.cf_answer.toUpperCase()}} (FLIPPED)` : `Base Twin (${{pairId}}) — Ground Truth: ${{data.base_answer.toUpperCase()}}`;
+      }}
+      openLightbox(imgSrc, title);
+    }}
 
     function openLightbox(imgSrc, title) {{
       if (!imgSrc) return;
